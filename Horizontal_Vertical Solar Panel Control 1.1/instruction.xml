@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131820872167263785</DateTime>
+  <Title>Horizontal_Vertical Solar Panel Control 1.1</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>1519435831</WorkshopFileHandle>
+  <Instructions>alias VDaySensor d0​
+alias HDaySensor d1​
+alias VSetting d3​
+alias HSetting d4​
+alias vert r0​
+alias horiz r1​
+alias isDaytime r2​
+s VDaySensor Mode 2 # Vertical​
+s HDaySensor Mode 1 # Horizontal​
+start:​
+yield​
+l isDaytime VDaySensor Activate​
+bgtz isDaytime tracksun​
+s HSetting Setting 0​
+s VSetting Setting 0​
+j start​
+tracksun:​
+l horiz HDaySensor SolarAngle​
+mul horiz horiz -1​
+s HSetting Setting horiz​
+l vert VDaySensor SolarAngle​
+sub vert 75 vert​
+div vert vert 1.5​
+s VSetting Setting vert​
+j start</Instructions>
+</InstructionData>

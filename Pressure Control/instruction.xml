@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131821543202616899</DateTime>
+  <Title>Pressure Control</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias GasSensor d0​
+alias Valve d1​
+alias pwm r0​
+alias current r1​
+alias error r2​
+alias lastError r5​
+alias integral r3​
+alias target r4​
+move target 101.325​
+move integral 0​
+move lastError 0​
+s Valve Maximum 0​
+s Valve Setting 0​
+s Valve On 1​
+start:​
+yield​
+l current GasSensor Pressure​
+sub error target current​
+add error error -0.1​
+sub r8 error lastError # derivative​
+move lastError error​
+# s db Setting error​
+add integral integral error​
+mul r6 100 error # kp​
+mul r9 1 r8 # kd​
+mul r7 0 integral # ki​
+add pwm r6 r7​
+add pwm pwm r9​
+mul pwm pwm -1​
+s db Setting pwm​
+min pwm pwm 100​
+max pwm pwm 0​
+s Valve Maximum pwm​
+s Valve Setting pwm​
+# s db Setting error​
+j start</Instructions>
+</InstructionData>

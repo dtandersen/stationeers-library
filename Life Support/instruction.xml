@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131821514082647166</DateTime>
+  <Title>Life Support</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias GasSensor d0​
+alias O2Valve d1​
+alias CO2Valve d2​
+alias N2Valve d3​
+alias OverPressure d4​
+alias pressure r0​ # room pressure​
+alias partial r1 # partial pressure of element​
+alias ratio r2 # ratio of element​
+start:​
+yield​
+l pressure GasSensor Pressure​
+slt r6 101.325 pressure​
+s OverPressure On r6​
+# co2 regulation​
+l pressure GasSensor Pressure​
+l ratio GasSensor RatioCarbonDioxide​
+mul partial pressure ratio​
+slt r6 partial 0.2​
+s CO2Valve On r6​
+# oxygen regulation​
+l pressure GasSensor Pressure​
+l ratio GasSensor RatioOxygen​
+mul partial pressure ratio​
+slt r6 partial 22​
+s O2Valve On r6​
+# nitrogen regulation​
+l pressure GasSensor Pressure​
+l ratio GasSensor RatioNitrogen​
+mul partial pressure ratio​
+slt r6 partial 79​
+s N2Valve On r6​
+j start</Instructions>
+</InstructionData>
