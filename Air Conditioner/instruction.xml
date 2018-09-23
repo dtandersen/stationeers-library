@@ -5,58 +5,44 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions>alias GasSensor d0​
+  <Instructions># Air Conditioner 1.0 https://github.com/dtandersen/stationeers-library​
+# Controls up to 5 wall coolers​
+alias GasSensor d0​
 alias Cooler1 d1​
 alias Cooler2 d2​
 alias Cooler3 d3​
 alias Cooler4 d4​
 alias Cooler5 d5​
-alias pwm r0​
+​
+alias setpoint r0​
 alias current r1​
 alias error r2​
-alias lastError r3​
-alias integral r4​
-alias target r5​
-move target 294.15​
-move integral 0​
-move lastError 0​
-#s Valve Maximum 0​
-s Cooler1 Setting 100​
-s Cooler1 On 0​
-s Cooler2 Setting 100​
-s Cooler2 On 0​
-s Cooler3 Setting 100​
-s Cooler3 On 0​
-s Cooler4 Setting 100​
-s Cooler4 On 0​
-s Cooler5 Setting 100​
-s Cooler5 On 0​
+alias bias r3​
+alias kp r4​
+alias pidout r5​
+​
+move setpoint 294.15 # setpoint temperature in Kelvin​
+move kp 5​
+move bias 0.0​
+​
 start:​
 yield​
 l current GasSensor Temperature​
-sub error target current​
-add error error -0.1 # bias​
-sub r8 error lastError # derivative​
-move lastError error​
-add integral integral error​
-mul r6 5 error # kp​
-mul r9 0 r8 # kd​
-mul r7 0 integral # ki​
-add pwm r6 r7​
-add pwm pwm r9​
-mul pwm pwm -1 # invert​
-s db Setting pwm​
-min pwm pwm 100​
-max pwm pwm 0​
-slt r9 0 pwm​
-s Cooler1 On r9​
-slt r9 1 pwm​
-s Cooler2 On r9​
-slt r9 2 pwm​
-s Cooler3 On r9​
-slt r9 3 pwm​
-s Cooler4 On r9​
-slt r9 4 pwm​
+sub error setpoint current​
+add error error bias​
+mul pidout kp error # kp​
+mul pidout pidout -1 # invert​
+s db Setting pidout​
+​
+slt r9 4 pidout​
 s Cooler5 On r9​
+slt r9 3 pidout​
+s Cooler4 On r9​
+slt r9 2 pidout​
+s Cooler3 On r9​
+slt r9 1 pidout​
+s Cooler2 On r9​
+slt r9 0 pidout​
+s Cooler1 On r9​
 j start</Instructions>
 </InstructionData>
