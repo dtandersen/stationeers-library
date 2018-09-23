@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131822040425968780</DateTime>
+  <Title>Air Conditioner</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias GasSensor d0​
+alias Cooler1 d1​
+alias Cooler2 d2​
+alias Cooler3 d3​
+alias Cooler4 d4​
+alias Cooler5 d5​
+alias pwm r0​
+alias current r1​
+alias error r2​
+alias lastError r3​
+alias integral r4​
+alias target r5​
+move target 294.15​
+move integral 0​
+move lastError 0​
+#s Valve Maximum 0​
+s Cooler1 Setting 100​
+s Cooler1 On 0​
+s Cooler2 Setting 100​
+s Cooler2 On 0​
+s Cooler3 Setting 100​
+s Cooler3 On 0​
+s Cooler4 Setting 100​
+s Cooler4 On 0​
+s Cooler5 Setting 100​
+s Cooler5 On 0​
+start:​
+yield​
+l current GasSensor Temperature​
+sub error target current​
+add error error -0.1 # bias​
+sub r8 error lastError # derivative​
+move lastError error​
+add integral integral error​
+mul r6 5 error # kp​
+mul r9 0 r8 # kd​
+mul r7 0 integral # ki​
+add pwm r6 r7​
+add pwm pwm r9​
+mul pwm pwm -1 # invert​
+s db Setting pwm​
+min pwm pwm 100​
+max pwm pwm 0​
+slt r9 0 pwm​
+s Cooler1 On r9​
+slt r9 1 pwm​
+s Cooler2 On r9​
+slt r9 2 pwm​
+s Cooler3 On r9​
+slt r9 3 pwm​
+s Cooler4 On r9​
+slt r9 4 pwm​
+s Cooler5 On r9​
+j start</Instructions>
+</InstructionData>
