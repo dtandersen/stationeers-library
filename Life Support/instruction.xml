@@ -5,36 +5,61 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions>alias GasSensor d0​
+  <Instructions># Life Support 1.0 https://github.com/dtandersen/sta​
+alias GasSensor d0​
 alias O2Valve d1​
 alias CO2Valve d2​
 alias N2Valve d3​
-alias OverPressure d4​
+alias Unused d4​
+alias Unused d5​
+​
 alias pressure r0​ # room pressure​
 alias partial r1 # partial pressure of element​
 alias ratio r2 # ratio of element​
+alias o2on r3​
+alias co2on r4​
+alias n2on r5​
+alias lowPressure r6​
+alias minPressure r7​
+alias maxPressure r8​
+alias o2Pressure r9​
+alias co2Pressure r10​
+alias n2Pressure r11​
+​
+move minPressure 50​
+move maxPressure 101.325​
+move o2Pressure 22​
+move co2Pressure 0.4​
+move n2Pressure 79​
+​
 start:​
 yield​
+​
 l pressure GasSensor Pressure​
-slt r6 101.325 pressure​
-s OverPressure On r6​
+slt lowPressure pressure minPressure​
+​
 # co2 regulation​
-l pressure GasSensor Pressure​
 l ratio GasSensor RatioCarbonDioxide​
 mul partial pressure ratio​
-slt r6 partial 0.2​
-s CO2Valve On r6​
+slt co2on partial co2Pressure​
+or co2on co2on lowPressure​
+s CO2Valve On co2on​
+​
 # oxygen regulation​
 l pressure GasSensor Pressure​
 l ratio GasSensor RatioOxygen​
 mul partial pressure ratio​
-slt r6 partial 22​
-s O2Valve On r6​
+slt o2on partial o2Pressure​
+or o2on o2on lowPressure​
+s O2Valve On o2on​
+​
 # nitrogen regulation​
 l pressure GasSensor Pressure​
 l ratio GasSensor RatioNitrogen​
 mul partial pressure ratio​
-slt r6 partial 79​
-s N2Valve On r6​
+slt n2on partial n2Pressure​
+or n2on n2on lowPressure​
+s N2Valve On n2on​
+​
 j start</Instructions>
 </InstructionData>
