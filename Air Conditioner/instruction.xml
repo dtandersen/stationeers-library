@@ -4,7 +4,7 @@
   <Title>Air Conditioner</Title>
   <Description />
   <Author>rotiking(warg)</Author>
-  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <WorkshopFileHandle>1521334355</WorkshopFileHandle>
   <Instructions># Air Conditioner 1.0 https://github.com/dtandersen/stationeers-library​
 # Controls up to 5 wall coolers​
 alias GasSensor d0​
