@@ -5,15 +5,20 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Temperature Reader 1.0​
+  <Instructions># Temperature Reader 1.1​
 alias Sensor d0​
 alias Bias d1​
 alias temperature r0​
 alias bias r1​
+alias kelvin r2​
+move kelvin 0​
 start:​
 l temperature Sensor Temperature​
 l bias Bias Setting​
 add temperature temperature bias​
+bgtz kelvin set​
+sub temperature temperature 273.15​
+set:​
 s db Setting temperature​
 yield​
 j start</Instructions>
