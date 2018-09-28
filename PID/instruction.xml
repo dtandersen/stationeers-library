@@ -5,7 +5,8 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions>alias Actual d0​
+  <Instructions># Hardcoded PID​
+alias Actual d0​
 ​
 # settings​
 alias setpoint r5​
