@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131825846554432891</DateTime>
+  <Title>Dynamic PID</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Hardcoded PID​
+alias Actual d0​
+alias Setpoint d1​
+alias KP d3​
+alias KD d4​
+alias KI d5​
+​
+# settings​
+alias setpoint r5​
+alias kp r0​
+alias kd r1​
+alias ki r2​
+alias bias r3​
+alias invert r4​
+​
+# preserved state​
+alias lastError r6​
+alias integral r7​
+​
+# single pass state​
+alias derivative r8​
+alias error r9​
+​
+# temp​
+alias current r11​
+alias temp1 r10​
+alias temp2 r11​
+alias temp3 r12​
+alias pidout r13​
+​
+# settings​
+#move setpoint 296.15​
+#move kp 100​
+#move kd 1​
+#move ki 0​
+move bias 0​
+move invert 1 # 1 no, -1 yes​
+​
+# init state​
+move integral 0​
+move lastError 0​
+​
+start:​
+jal read​
+jal calcerror​
+jal calc2​
+jal calcpid​
+yield​
+j start​
+​
+read:​
+l setpoint Setpoint Setting​
+l kp KP Setting​
+l kd KD Setting​
+l ki KI Setting​
+j ra​
+​
+calcerror:​
+l current Actual Setting​
+sub error setpoint current​
+add error error bias​
+j ra​
+​
+calc2:​
+sub derivative error lastError​
+move lastError error​
+add integral integral error​
+j ra​
+​
+calcpid:​
+mul temp1 kp error​
+mul temp2 kd derivative​
+mul temp3 ki integral​
+add pidout temp1 temp2​
+add pidout pidout temp3​
+mul pidout invert pidout​
+s db Setting pidout​
+j ra</Instructions>
+</InstructionData>
