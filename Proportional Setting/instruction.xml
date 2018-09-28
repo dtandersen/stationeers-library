@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131825817667915545</DateTime>
+  <Title>Proportional Setting</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Air Conditioner 1.0 https://github.com/dtandersen/stationeers-library​
+# Controls up to 5 wall coolers​
+alias PID d0​
+alias Device1 d1​
+alias Device2 d2​
+alias Device3 d3​
+alias Device4 d4​
+alias Device5 d5​
+​
+alias pidout r5​
+alias deviceCount r6​
+alias index r0​
+alias temp r10​
+alias t1 r11​
+​
+move deviceCount 5​
+​
+start:​
+yield​
+l pidout PID Setting​
+move index 1​
+loop:​
+sle temp index deviceCount​
+blez temp start​
+jal setdev​
+j loop​
+​
+setdev:​
+sle temp pidout 0​
+bgtz temp off​
+mod t1 pidout 100​
+s dr0 On 1​
+s dr0 Setting t1​
+done:​
+sub pidout pidout 100​
+add index index 1​
+j ra​
+​
+off:​
+s dr0 On 0​
+s dr0 Setting 0​
+j done</Instructions>
+</InstructionData>
