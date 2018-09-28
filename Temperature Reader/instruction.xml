@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131825785461729143</DateTime>
+  <Title>Temperature Reader</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Temperature Reader 1.0​
+alias Sensor d0​
+alias Bias d1​
+alias temperature r0​
+alias bias r1​
+start:​
+l temperature Sensor Temperature​
+l bias Bias Setting​
+add temperature temperature bias​
+s db Setting temperature​
+yield​
+j start</Instructions>
+</InstructionData>
