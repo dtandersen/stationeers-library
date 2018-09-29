@@ -5,20 +5,22 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Temperature Reader 1.1​
+  <Instructions># Temperature Reader 1.0​
+# https://github.com/dtandersen/stationeers-library​
 alias Sensor d0​
-alias Bias d1​
+# alias Bias d1​
 alias temperature r0​
 alias bias r1​
-alias kelvin r2​
-move kelvin 0​
+alias celcius r2​
+move celcius 0​
+move bias 0​
 start:​
 l temperature Sensor Temperature​
-l bias Bias Setting​
+# l bias Bias Setting​
 add temperature temperature bias​
-bgtz kelvin set​
+blez celcius outputtemp​
 sub temperature temperature 273.15​
-set:​
+outputtemp:​
 s db Setting temperature​
 yield​
 j start</Instructions>
