@@ -68,13 +68,18 @@ Night parking rotates the solar panel 180 degrees and sleeps until sunrise.
 
 [b]Changelog[/b]
 
-2.0
+STC2A-201-P
+[list]
+[*]Solar panel no longer rotates 180 degress after power failure recovery
+[/list]
+
+STC2A-200-P
 [list]
 [*]Intelligent night park
 [*]Horizontal offset adjustment
 [/list]
 
-1.1
+STC2A-100
 [list]
 [*]Minor code cleanup
 [/list]</Description>
