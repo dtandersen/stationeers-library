@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131820872167263785</DateTime>
+  <Title>2-axis Solar Tracking with Park</Title>
+  <Description>The STC2A series solar tracking controller accurately calculate the horizontal and vertical position of the sun for 99-100% solar power collection efficiecy. P series tracking systems feature Zero Configuration Night Park® that pre-positions solar panels to face the rising sun for maximum power.
+
+[table]
+[tr][td]Model[/td][td]STC2A-200-P[/td][/tr]
+[tr][td]Manufacturer[/td][td]ZeroOne Corporation[/td][/tr]
+[/table]
+
+[b]Installation[/b]
+
+Requirements:
+[list]
+[*] Solar Panels
+[*] Dalight Sensor (2)
+[*] Integrated Circuit (2)
+[*] Batch Writer (2)
+[*] Memory (2)
+[/list]
+
+Build solar panels with power port facing east (sunrise).
+
+Mount two daylight sensors face up. The green sensor must face the sun. Point the power port of the horizontal sensor south.
+
+Consult the alignment table if the solar panel power port doesn't face east.
+
+[table]
+[tr]
+[td]Panel Power Port[/td]
+[td]East (sunrise)[/td]
+[td]South[/td]
+[td]West (sunset)[/td]
+[td]North[/td]
+[/tr]
+[tr]
+[td]Sensor Power Port[/td]
+[td]South[/td]
+[td]West[/td]
+[td]North[/td]
+[td]East[/td]
+[/tr]
+[/table]
+
+Build circuit network and assign IC pins.
+
+[b]Notes[/b]
+
+Solar panels do not park if they are built in the dark. They assume they are recovering from a nighttime power failure and remain in position. The solar panels will park as usual the next evening.
+
+The circuit network doesn't have to be powered at night, since it can turn on at sunrise.
+
+To guarantee morning startup after a daytime power failure, disconnect one solar panel from the data network and align it to sunrise at 0%. The system would still reactivate without this, but possibly not at sunrise.
+
+Night parking occurs when the sun is down and the solar panel reports 0 Charge.
+
+Night parking rotates the solar panel 180 degrees and sleeps until sunrise.
+
+[b]​IC Housing Connections[/b]
+[list]
+[*]VDaySensor (D0): Daylight Sensor - Horizontal
+[*]HDaySensor (D1): Daylight Sensor - Vertical
+[*]Charge (D2): Any solar panel
+[*]VSetting (D3): Memory - Horizontal
+[*]HSetting (D4): Memory - Vertical
+[/list]
+
+[b]Changelog[/b]
+
+2.0
+[list]
+[*]Intelligent night park
+[*]Horizontal offset adjustment
+[/list]
+
+1.1
+[list]
+[*]Minor code cleanup
+[/list]</Description>
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>1519435831</WorkshopFileHandle>
+  <Instructions># 2-Axis Solar with Park​
+# https://github.com/dtandersen/stationeers-library​
+alias VDaySensor d0​
+alias HDaySensor d1​
+alias SolarPanel d2​
+alias VSetting d3​
+alias HSetting d4​
+alias vert r0​
+alias horiz r1​
+alias isDaytime r2​
+alias hoffset r3​
+alias invert r4​
+alias t0 r5​
+​
+s VDaySensor Mode 2 # Vertical​
+s HDaySensor Mode 1 # Horizontal​
+move invert -1​
+move hoffset 0​
+​
+day:​
+l isDaytime VDaySensor Activate​
+bgtz isDaytime operate​
+l t0 SolarPanel Charge​
+bgtz t0 operate​
+j park​
+operate:​
+l horiz HDaySensor SolarAngle​
+mul horiz horiz invert​
+add horiz horiz hoffset​
+jal fixhoriz​
+s HSetting Setting horiz​
+l vert VDaySensor SolarAngle​
+sub vert 75 vert​
+div vert vert 1.5​
+s VSetting Setting vert​
+yield​
+j day​
+​
+park:​
+sub horiz horiz 180​
+div horiz horiz 90​
+round horiz horiz​
+mul horiz horiz 90​
+jal fixhoriz​
+s HSetting Setting horiz​
+s VSetting Setting 0​
+yield​
+j night​
+​
+night:​
+l isDaytime VDaySensor Activate​
+bgtz isDaytime day​
+yield​
+j night​
+​
+fixhoriz:​
+bltz horiz negative​
+sub horiz horiz 360​
+j fixhoriz​
+negative:​
+add horiz horiz 360​
+j ra</Instructions>
+</InstructionData>
