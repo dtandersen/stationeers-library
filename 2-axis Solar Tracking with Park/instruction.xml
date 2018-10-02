@@ -5,7 +5,7 @@
   <Description>The STC2A series solar tracking controller accurately calculate the horizontal and vertical position of the sun for 99-100% solar power collection efficiecy. P series tracking systems feature Zero Configuration Night Park® that pre-positions solar panels to face the rising sun for maximum power.
 
 [table]
-[tr][td]Model[/td][td]STC2A-200-P[/td][/tr]
+[tr][td]Model[/td][td]STC2A-201-P[/td][/tr]
 [tr][td]Manufacturer[/td][td]ZeroOne Corporation[/td][/tr]
 [/table]
 
@@ -80,8 +80,11 @@ Night parking rotates the solar panel 180 degrees and sleeps until sunrise.
 [/list]</Description>
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>1519435831</WorkshopFileHandle>
-  <Instructions># 2-Axis Solar with Park​
+  <Instructions># 2-Axis Solar Tracking with Park​
+# IC Firmware STC2A-201-P​
 # https://github.com/dtandersen/stationeers-library​
+# Panel Power   | East* | South | West  | North​
+# Sensor Power  | South | West  | North | East​
 alias VDaySensor d0​
 alias HDaySensor d1​
 alias SolarPanel d2​
@@ -98,6 +101,12 @@ s VDaySensor Mode 2 # Vertical​
 s HDaySensor Mode 1 # Horizontal​
 move invert -1​
 move hoffset 0​
+​
+night:​
+l isDaytime VDaySensor Activate​
+bgtz isDaytime day​
+yield​
+j night​
 ​
 day:​
 l isDaytime VDaySensor Activate​
@@ -126,12 +135,6 @@ mul horiz horiz 90​
 jal fixhoriz​
 s HSetting Setting horiz​
 s VSetting Setting 0​
-yield​
-j night​
-​
-night:​
-l isDaytime VDaySensor Activate​
-bgtz isDaytime day​
 yield​
 j night​
 ​
