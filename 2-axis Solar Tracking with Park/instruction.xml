@@ -59,11 +59,11 @@ Night parking rotates the solar panel 180 degrees and sleeps until sunrise.
 
 [b]​IC Housing Connections[/b]
 [list]
-[*]VDaySensor (D0): Daylight Sensor - Horizontal
-[*]HDaySensor (D1): Daylight Sensor - Vertical
+[*]VDaySensor (D0): Daylight Sensor - Vertical
+[*]HDaySensor (D1): Daylight Sensor - Horizontal
 [*]Charge (D2): Any solar panel
-[*]VSetting (D3): Memory - Horizontal
-[*]HSetting (D4): Memory - Vertical
+[*]VSetting (D3): Memory - Vertical
+[*]HSetting (D4): Memory - Horizontal
 [/list]
 
 [b]Changelog[/b]
