@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131830156691520423</DateTime>
+  <Title>Furnace Control</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias Furnace d0​
+alias Purge d1​
+alias Fill d2​
+alias Mixer d3​
+alias Switch d4​
+​
+alias pressure r0​
+alias hasGas r1​
+alias switch r2​
+​
+wait:​
+s db Setting 0​
+l pressure Furnace Pressure​
+sgt hasGas pressure 0​
+s Purge On hasGas​
+s Fill On 0​
+s Mixer On 0​
+l switch Switch Setting​
+bgtz switch purge​
+yield​
+j wait​
+​
+purge:​
+s db Setting 1​
+l switch Switch Setting​
+bgtz switch wait​
+l pressure Furnace Pressure​
+sgt hasGas pressure 0​
+s Purge On hasGas​
+blez pressure prime​
+yield​
+j purge​
+​
+prime:​
+s db Setting 2​
+l switch Switch Setting​
+bgtz switch wait​
+s Fill On 1​
+s Fill Setting 1​
+s Furnace Activate 1​
+s Mixer On 1​
+s Mixer Setting 1​
+yield​
+j prime</Instructions>
+</InstructionData>
