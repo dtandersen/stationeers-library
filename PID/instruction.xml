@@ -6,7 +6,8 @@
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Hardcoded PID​
-alias Actual d0​
+alias PV d0​
+alias SP d1​
 ​
 # settings​
 alias setpoint r5​
@@ -44,6 +45,8 @@ move integral 0​
 move lastError 0​
 ​
 start:​
+brdns SP 2​
+l setpoint SP Setting​
 jal calcerror​
 jal calc2​
 jal calcpid​
@@ -51,7 +54,7 @@ yield​
 j start​
 ​
 calcerror:​
-l current Actual Setting​
+l current PV Setting​
 sub error setpoint current​
 add error error bias​
 j ra​
