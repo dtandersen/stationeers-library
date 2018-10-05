@@ -5,20 +5,28 @@
   <Description>Reads temperature from a sensor. Optionally converts to Celsius.</Description>
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>1525362804</WorkshopFileHandle>
-  <Instructions># Temperature Reader 1.1​
+  <Instructions># Temperature Reader​
+# Model: TR-102​
 # https://github.com/dtandersen/stationeers-library​
 alias Sensor d0​
-# alias Bias d1​
+alias Mode d1 # 0=kelvin, 1=celcius​
+alias Bias d2​
 alias temperature r0​
-alias bias r1​
-alias celsius r2​
-move celsius 0​
+alias mode r1​
+alias bias r2​
+alias t0 r10​
+move mode 0​
 move bias 0​
 start:​
 l temperature Sensor Temperature​
-# l bias Bias Setting​
+bdns Mode nomode​
+l mode Mode Setting​
+nomode:​
+bdns Bias nobias​
+l bias Bias Setting​
+nobias:​
 add temperature temperature bias​
-blez celsius outputtemp​
+blez mode outputtemp​
 sub temperature temperature 273.15​
 outputtemp:​
 s db Setting temperature​
