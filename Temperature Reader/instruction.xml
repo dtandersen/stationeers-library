@@ -14,7 +14,6 @@ alias Bias d2​
 alias temperature r0​
 alias mode r1​
 alias bias r2​
-alias t0 r10​
 move mode 0​
 move bias 0​
 start:​
