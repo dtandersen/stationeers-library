@@ -5,42 +5,43 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Proportional Setting 1.1​
+  <Instructions># Proportional On/Off​
+# PP-101​
 # https://github.com/dtandersen/stationeers-library​
 # Controls up to 5 devices​
 alias PID d0​
-​
 alias pidout r5​
-alias deviceCount r6​
+alias maxDevices r6​
 alias index r0​
-alias temp r10​
-alias t1 r11​
+alias device dr0​
+alias t0 r10 # temp​
+alias t1 r11 # temp​
 ​
-move deviceCount 5
+init:​
+move maxDevices 5​
 ​
 start:​
 yield​
 l pidout PID Setting​
 move index 1​
 loop:​
-sle temp index deviceCount​
-blez temp start​
-jal setdev​
+sle t0 index maxDevices​
+blez t0 start​
+bdns dr0 loop​
+jal updatedevice​
+sub pidout pidout 100​
+add index index 1​
 j loop​
 ​
-setdev:​
-sle temp pidout 0​
-bgtz temp off​
+updatedevice:​
+sle t0 pidout 0​
+bgtz t0 off​
 mod t1 pidout 100​
 s dr0 On 1​
 s dr0 Setting t1​
-done:​
-sub pidout pidout 100​
-add index index 1​
 j ra​
-​
 off:​
 s dr0 On 0​
 s dr0 Setting 0​
-j done</Instructions>
+j ra</Instructions>
 </InstructionData>
