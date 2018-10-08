@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131831911159536446</DateTime>
+  <Title>Thermostat</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Model TH-100​
+alias Temperature d0​
+alias Heater d1​
+alias Cooler d2​
+alias setpoint r0​
+alias temperature r1​
+​
+l temperature d0 Temperature​
+sgt</Instructions>
+</InstructionData>
