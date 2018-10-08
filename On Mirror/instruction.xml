@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131833555240971310</DateTime>
+  <Title>On Mirror</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias Device d0​
+#alias deviceCount r1​
+#alias index r0​
+alias onoff r2​
+#alias t0 r10​
+#move deviceCount 1​
+​
+start:​
+l onoff Device On​
+#move index 1​
+#sle t0 index deviceCount​
+# bdns​
+s d1 On onoff​
+s d1 Setting 100​
+yield​
+j start</Instructions>
+</InstructionData>
