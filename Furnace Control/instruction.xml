@@ -7,21 +7,30 @@
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions>alias Furnace d0​
 alias Purge d1​
-alias Fill d2​
-alias Mixer d3​
+alias Fuel d2​
+# alias Mixer d3​
 alias Switch d4​
 ​
 alias pressure r0​
 alias hasGas r1​
 alias switch r2​
+alias temperature r3​
+alias atTemp r10​
+alias minTemp r4​
+alias minPressure r5​
+alias t0 r10​
+alias t1 r11​
+alias t2 r12​
+alias t3 r13​
+move minTemp 1500​
+move minPressure 6500​
 ​
 wait:​
 s db Setting 0​
 l pressure Furnace Pressure​
 sgt hasGas pressure 0​
 s Purge On hasGas​
-s Fill On 0​
-s Mixer On 0​
+s Fuel On 0​
 l switch Switch Setting​
 bgtz switch purge​
 yield​
@@ -34,7 +43,7 @@ bgtz switch wait​
 l pressure Furnace Pressure​
 sgt hasGas pressure 0​
 s Purge On hasGas​
-blez pressure prime​
+blez pressure regulate​
 yield​
 j purge​
 ​
@@ -42,11 +51,33 @@ prime:​
 s db Setting 2​
 l switch Switch Setting​
 bgtz switch wait​
-s Fill On 1​
-s Fill Setting 1​
 s Furnace Activate 1​
-s Mixer On 1​
-s Mixer Setting 1​
+l temperature Furnace Temperature​
+sge atTemp temperature minTemp​
+bgtz atTemp regulate​
+s Fuel On 1​
+s Fuel Setting 1​
 yield​
-j prime</Instructions>
+j prime​
+​
+regulate:​
+#s db Setting 3​
+s Fuel Setting 1​
+l switch Switch Setting​
+bgtz switch wait​
+l pressure Furnace Pressure​
+l temperature Furnace Temperature​
+sle t0 temperature minTemp​
+sle t1 pressure minPressure​
+or t2 t0 t1​
+s Fuel On t2​
+s Furnace Activate t2​
+sub t0 minTemp temperature​
+mul t0 t0 5​
+max t0 t0 1​
+min t0 t0 10​
+s Fuel Setting t0​
+s db Setting t0​
+yield​
+j regulate</Instructions>
 </InstructionData>
