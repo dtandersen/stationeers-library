@@ -8,76 +8,113 @@
   <Instructions>alias Furnace d0​
 alias Purge d1​
 alias Fuel d2​
-# alias Mixer d3​
+alias Input d3​
 alias Switch d4​
+alias TempValve d5​
 ​
-alias pressure r0​
-alias hasGas r1​
-alias switch r2​
-alias temperature r3​
-alias atTemp r10​
-alias minTemp r4​
-alias minPressure r5​
+alias minTemp r0​
+alias minPressure r1​
+​
+#alias pressure r2​
+#alias hasGas r3​
+#alias switch r4​
+#alias temperature r5​
+alias atTemp r6​
+​
+alias setpoint r2​
+alias pv r3​
+alias kd r4​
+alias error r5​
+​
+alias pid r7​
 alias t0 r10​
 alias t1 r11​
 alias t2 r12​
-alias t3 r13​
+alias retval r13​
+​
 move minTemp 1500​
 move minPressure 6500​
 ​
 wait:​
-s db Setting 0​
-l pressure Furnace Pressure​
-sgt hasGas pressure 0​
-s Purge On hasGas​
-s Fuel On 0​
-l switch Switch Setting​
-bgtz switch purge​
+move sp 0​
 yield​
+s db Setting 0​
+l t0 Furnace Pressure​
+sgt t1 t0 0​
+s Purge On t1​
+s Purge Setting 100​
+s Fuel On 0​
+s Input On 0​
+s TempValve On 1​
+l t1 Switch Setting​
+bgtz t1 purge​
 j wait​
 ​
 purge:​
-s db Setting 1​
-l switch Switch Setting​
-bgtz switch wait​
-l pressure Furnace Pressure​
-sgt hasGas pressure 0​
-s Purge On hasGas​
-blez pressure regulate​
 yield​
-j purge​
-​
-prime:​
-s db Setting 2​
-l switch Switch Setting​
-bgtz switch wait​
-s Furnace Activate 1​
-l temperature Furnace Temperature​
-sge atTemp temperature minTemp​
-bgtz atTemp regulate​
+s db Setting 1​
+l t1 Switch Setting​
+bgtz t1 wait​
+l t0 Furnace Pressure​
+bgtz t0 haspressure​
+s Purge On 0​
 s Fuel On 1​
 s Fuel Setting 1​
-yield​
-j prime​
+j regulate​
+haspressure:​
+s Purge On 1​
+s Purge Setting 100​
+j purge​
 ​
 regulate:​
-#s db Setting 3​
-s Fuel Setting 1​
-l switch Switch Setting​
-bgtz switch wait​
-l pressure Furnace Pressure​
-l temperature Furnace Temperature​
-sle t0 temperature minTemp​
-sle t1 pressure minPressure​
-or t2 t0 t1​
-s Fuel On t2​
-s Furnace Activate t2​
-sub t0 minTemp temperature​
-mul t0 t0 5​
-max t0 t0 1​
-min t0 t0 10​
-s Fuel Setting t0​
-s db Setting t0​
 yield​
-j regulate</Instructions>
+l t1 Switch Setting​
+bgtz t1 wait​
+l t0 Furnace Temperature​
+push t0 # pv​
+push minTemp # sp​
+push 0.25 # kd​
+jal calcpid​
+move pid retval​
+s db Setting retval​
+blez pid overtemp​
+s Furnace Activate 1​
+s Fuel On 1​
+s Fuel Setting pid​
+s TempValve On 0​
+j checkpressure​
+overtemp:​
+s Fuel On 0​
+s TempValve On 1​
+checkpressure:​
+#j regulate​
+#s db Setting t0​
+l t0 Furnace Pressure​
+push t0 # pv​
+push minPressure # sp​
+push 0.1 # kd​
+jal calcpid​
+move pid retval​
+blez pid overpressure​
+s Input On 1​
+s Input Setting pid​
+s Purge On 0​
+j done​
+overpressure:​
+s Purge On 1​
+mul pid pid -1​
+s Purge Setting pid​
+s Input On 0​
+done:​
+j regulate​
+​
+calcpid:​
+pop kd​
+pop setpoint​
+pop pv​
+#s db Setting pv​
+sub error setpoint pv # target - current​
+mul retval kd error​
+​
+j ra</Instructions>
 </InstructionData>
