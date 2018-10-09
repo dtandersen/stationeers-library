@@ -6,7 +6,7 @@
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># 1:1 Power Mirror
-# Model: PM11-100​
+# Model: PM11-100​ / ZeroOne Corporation
 alias Device d0​
 alias Mirror d1​
 alias deviceOn r0

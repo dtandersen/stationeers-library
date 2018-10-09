@@ -6,7 +6,7 @@
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Pump Monitor and Control
-# Model: VPMC-100​
+# Model: VPMC-100​ [ ZeroOne Corporation ]
 alias Pump d0​
 alias Display d1​
 alias setting r0​
