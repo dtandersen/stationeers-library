@@ -6,7 +6,7 @@
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Pump Controller​
-# Mode: PMC-100​
+# Mode: VPC-100​
 alias Pump d0​
 alias Display d1​
 alias setting r0​
@@ -15,7 +15,9 @@ alias t0 r10​
 ​
 start:​
 l setting db Setting​
-sge active setting 0 # active if Pump Setting &gt;= 0​
+min setting setting 100​
+max setting setting 0​
+sge active setting 0 # active if Pump Setting  &gt;= 0​
 s Pump Setting setting​
 s Pump On active​
 s Display Setting setting​
