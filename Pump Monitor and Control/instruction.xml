@@ -5,8 +5,8 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Pump Controller​
-# Mode: VPC-100​
+  <Instructions># Pump Monitor and Control
+# Model: VPMC-100​
 alias Pump d0​
 alias Display d1​
 alias setting r0​
@@ -16,9 +16,9 @@ alias t0 r10​
 ​move lastSetting -1
 
 start:​
+l setting db Setting​
 sne t0 setting lastSetting
 bgtz t0 done
-l setting db Setting​
 min setting setting 100​
 max setting setting 0​
 sge active setting 0 # active if Pump Setting  &gt;= 0​
