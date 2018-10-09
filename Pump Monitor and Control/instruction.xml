@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131835355902286995</DateTime>
-  <Title>Pump Monitor and Controller</Title>
+  <Title>Pump Monitor and Control</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
@@ -10,10 +10,14 @@
 alias Pump d0​
 alias Display d1​
 alias setting r0​
-alias active r1​
+alias lastSetting r1
+alias active r2
 alias t0 r10​
-​
+​move lastSetting -1
+
 start:​
+sne t0 setting lastSetting
+bgtz t0 done
 l setting db Setting​
 min setting setting 100​
 max setting setting 0​
@@ -21,6 +25,8 @@ sge active setting 0 # active if Pump Setting  &gt;= 0​
 s Pump Setting setting​
 s Pump On active​
 s Display Setting setting​
+move lastSetting setting
+done:
 yield​
 j start</Instructions>
 </InstructionData>
