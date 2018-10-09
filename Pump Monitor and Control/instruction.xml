@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131835355902286995</DateTime>
-  <Title>Volume Pump Controller</Title>
+  <Title>Pump Monitor and Controller</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Pump Controller​
-# Mode: VPC-100​
-# pump​
-# value​
-# LED display​
+# Mode: PMC-100​
 alias Pump d0​
 alias Display d1​
 alias setting r0​
@@ -17,11 +14,11 @@ alias active r1​
 alias t0 r10​
 ​
 start:​
-yield​
 l setting db Setting​
 sge active setting 0 # active if Pump Setting &gt;= 0​
 s Pump Setting setting​
 s Pump On active​
 s Display Setting setting​
+yield​
 j start</Instructions>
 </InstructionData>
