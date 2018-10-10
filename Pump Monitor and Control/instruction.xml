@@ -13,19 +13,20 @@ alias setting r0​
 alias lastSetting r1​
 alias active r2​
 alias t0 r10​
-​move lastSetting -1​
+​
+move lastSetting -1​
 ​
 start:​
 l setting db Setting​
-sne t0 setting lastSetting​
-bgtz t0 done​
+#bne setting lastSetting done​
 min setting setting 100​
 max setting setting 0​
-sge active setting 0 # active if Pump Setting  &gt;= 0​
+sgt active setting 0 # active if Pump Setting &gt; 0​
 s Pump Setting setting​
 s Pump On active​
-brdns Display 2​
+bdns Display aa​
 s Display Setting setting​
+aa:​
 move lastSetting setting​
 done:​
 yield​
