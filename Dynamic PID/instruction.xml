@@ -5,9 +5,11 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Hardcoded PID​
-alias Actual d0​
-alias Setpoint d1​
+  <Instructions># Generic Pid​
+# GPID-100​
+alias PV d0​
+alias SP d1​
+alias Invert d2​
 alias KP d3​
 alias KD d4​
 alias KI d5​
@@ -36,10 +38,6 @@ alias temp3 r12​
 alias pidout r13​
 ​
 # settings​
-#move setpoint 296.15​
-#move kp 100​
-#move kd 1​
-#move ki 0​
 move bias 0​
 move invert 1 # 1 no, -1 yes​
 ​
@@ -56,14 +54,19 @@ yield​
 j start​
 ​
 read:​
-l setpoint Setpoint Setting​
+l setpoint SP Setting​
+brdns KP 2​
 l kp KP Setting​
-l kd KD Setting​
+brdns KI 2​
 l ki KI Setting​
+brdns KD 2​
+l kd KD Setting​
+brdns Invert 2​
+l invert Invert Setting​
 j ra​
 ​
 calcerror:​
-l current Actual Setting​
+l current PV Setting​
 sub error setpoint current​
 add error error bias​
 j ra​
