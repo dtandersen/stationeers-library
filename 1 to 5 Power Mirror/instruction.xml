@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131833555240971310</DateTime>
-  <Title>On Mirror</Title>
+  <Title>1 to 5 Power Mirror</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions>alias Device d0​
+  <Instructions># 5-way Power Mirror
+alias Device d0​
 #alias deviceCount r1​
 #alias index r0​
 alias onoff r2​

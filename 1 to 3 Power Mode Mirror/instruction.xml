@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131824151195877530</DateTime>
-  <Title>Master Slave</Title>
+  <Title>Vent Slave</Title>
   <Description />
   <Author>rotiking(warg)</Author>
-  <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions>​
+  <WorkshopFileHandle>1523099681</WorkshopFileHandle>
+  <Instructions>​# 1 to 3 Power Mode Mirror
+# Model: PMM-100
+# https://github.com/dtandersen/stationeers-library
 alias Master d0​
 alias Slave1 d1​
 alias Slave2 d2​
