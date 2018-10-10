@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131836045956857979</DateTime>
+  <Title>Furnace Fuel Controller</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Furnace Fuel Controller​
+# Model: FFC-100​
+alias FurnaceCtrl d0​
+alias FuelPID d1​
+alias RadPID d2​
+alias FuelMonCtrl d3​
+alias RadMonCtrl d4​
+alias state r0​
+alias t0 r10​
+​
+start:​
+l state FurnaceCtrl Setting​
+seq t0 state 0​
+bgtz t0 idle​
+seq t0 state 1​
+bgtz t0 purge​
+seq t0 state 2​
+bgtz t0 regulate​
+done:​
+yield​
+j start​
+​
+idle:​
+purge:​
+s FuelMonCtrl Setting 0​
+s RadMonCtrl Setting 0​
+j done​
+​
+regulate:​
+l t0 FuelPID Setting​
+s FuelMonCtrl Setting t0​
+l t0 RadPID Setting​
+s RadMonCtrl Setting t0​
+j done</Instructions>
+</InstructionData>
