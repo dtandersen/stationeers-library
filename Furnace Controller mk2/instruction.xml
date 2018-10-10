@@ -9,10 +9,8 @@
 # Model: FC-100​
 alias Furnace d0​
 alias Purge d1​
-alias Fuel d2​
 alias Input d3​
 alias Switch d4​
-alias TempValve d5​
 ​
 alias minTemp r0​
 alias minPressure r1​
@@ -44,9 +42,7 @@ s db Setting 0​
 l t0 Furnace Pressure​
 sgt t1 t0 0​
 s Purge Setting 100​
-s Fuel Setting 0​
 s Input Setting 0​
-s TempValve On 1​
 l t1 Switch Setting​
 bgtz t1 purge​
 j wait​
@@ -59,7 +55,6 @@ bgtz t1 wait​
 l t0 Furnace Pressure​
 bgtz t0 haspressure​
 s Purge Setting 0​
-s Fuel Setting 0​
 j regulate​
 haspressure:​
 s Purge Setting 100​
@@ -67,6 +62,7 @@ j purge​
 ​
 regulate:​
 yield​
+s db Setting 2​
 l t1 Switch Setting​
 bgtz t1 wait​
 l t0 Furnace Temperature​
@@ -75,18 +71,11 @@ push minTemp # sp​
 push 0.25 # kd​
 jal calcpid​
 move pid retval​
-s db Setting retval​
 blez pid overtemp​
 s Furnace Activate 1​
-s Fuel Setting pid​
-s TempValve On 0​
 j checkpressure​
 overtemp:​
-s Fuel Setting 0​
-s TempValve On 1​
 checkpressure:​
-#j regulate​
-#s db Setting t0​
 l t0 Furnace Pressure​
 push t0 # pv​
 push minPressure # sp​
@@ -108,7 +97,6 @@ calcpid:​
 pop kd​
 pop setpoint​
 pop pv​
-#s db Setting pv​
 sub error setpoint pv # target - current​
 mul retval kd error​
 ​
