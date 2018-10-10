@@ -13,31 +13,31 @@ alias OutflowPID d2​
 alias InflowMonCtrl d3​
 alias OutflowMonCtrl d4​
 alias state r0​
-alias t0 r10​
+alias pid r1​
 ​
 start:​
 l state FurnaceCtrl Setting​
-seq t0 state 0​
-bgtz t0 idle​
-​
-seq t0 state 1​
-bgtz t0 purge​
-seq t0 state 2​
-bgtz t0 regulate​
+beq state 0 idle​
+beq state 1 purge​
+beq state 2 regulate​
 done:​
 yield​
 j start​
 ​
 idle:​
-purge:​
-s OutflowMonCtrl Setting 0​
 s InflowMonCtrl Setting 0​
+s OutflowMonCtrl Setting 0​
+j done​
+​
+purge:​
+s InflowMonCtrl Setting 0​
+s OutflowMonCtrl Setting 100​
 j done​
 ​
 regulate:​
-l t0 InflowPID Setting​
-s InflowMonCtrl Setting t0​
-l t0 InflowPID Setting​
-s InflowMonCtrl Setting t0​
+l pid InflowPID Setting​
+s InflowMonCtrl Setting pid​
+l pid OutflowPID Setting​
+s OutflowMonCtrl Setting pid​
 j done</Instructions>
 </InstructionData>
