@@ -55,14 +55,18 @@ j start​
 ​
 read:​
 l setpoint SP Setting​
-brdns KP 2​
+bdns KP a​
 l kp KP Setting​
-brdns KI 2​
+a:​
+bdns KI b​
 l ki KI Setting​
-brdns KD 2​
+b:​
+bdns KD c​
 l kd KD Setting​
-brdns Invert 2​
+c:​
+bdns Invert d​
 l invert Invert Setting​
+d:​
 j ra​
 ​
 calcerror:​
