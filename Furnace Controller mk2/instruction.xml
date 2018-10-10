@@ -7,98 +7,43 @@
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Furnace Controller​
 # Model: FC-100​
-alias Furnace d0​
-alias Purge d1​
-alias Input d3​
+alias Pressure d0​
 alias Switch d4​
-​
-alias minTemp r0​
-alias minPressure r1​
-​
-#alias pressure r2​
-#alias hasGas r3​
-#alias switch r4​
-#alias temperature r5​
-alias atTemp r6​
-​
-alias setpoint r2​
-alias pv r3​
-alias kd r4​
-alias error r5​
-​
-alias pid r7​
-alias t0 r10​
-alias t1 r11​
-alias t2 r12​
-alias retval r13​
-​
-move minTemp 1500​
-move minPressure 6500​
+alias pressure r0​
+alias t1 r1​
 ​
 wait:​
-move sp 0​
-yield​
 s db Setting 0​
-l t0 Furnace Pressure​
-sgt t1 t0 0​
-s Purge Setting 100​
-s Input Setting 0​
 l t1 Switch Setting​
-bgtz t1 purge​
+beq t1 0 waitdone​
+yield​
+j purge​
+waitdone:​
+yield​
 j wait​
 ​
 purge:​
-yield​
 s db Setting 1​
 l t1 Switch Setting​
-bgtz t1 wait​
-l t0 Furnace Pressure​
-bgtz t0 haspressure​
-s Purge Setting 0​
+beq t1 0 aa​
+yield​
+j wait​
+aa:​
+l pressure Pressure Setting​
+bne pressure 0 bb​
+yield​
 j regulate​
-haspressure:​
-s Purge Setting 100​
+bb:​
+yield​
 j purge​
 ​
 regulate:​
-yield​
 s db Setting 2​
 l t1 Switch Setting​
-bgtz t1 wait​
-l t0 Furnace Temperature​
-push t0 # pv​
-push minTemp # sp​
-push 0.25 # kd​
-jal calcpid​
-move pid retval​
-blez pid overtemp​
-s Furnace Activate 1​
-j checkpressure​
-overtemp:​
-checkpressure:​
-l t0 Furnace Pressure​
-push t0 # pv​
-push minPressure # sp​
-push 0.1 # kd​
-jal calcpid​
-move pid retval​
-blez pid overpressure​
-s Input Setting pid​
-s Purge Setting 0​
-j done​
-overpressure:​
-mul pid pid -1​
-s Purge Setting pid​
-s Input Setting 0​
-done:​
-j regulate​
-​
-calcpid:​
-pop kd​
-pop setpoint​
-pop pv​
-sub error setpoint pv # target - current​
-mul retval kd error​
-​
-j ra</Instructions>
+beq t1 0 cc​
+yield​
+j wait​
+cc:​
+yield​
+j regulate</Instructions>
 </InstructionData>
