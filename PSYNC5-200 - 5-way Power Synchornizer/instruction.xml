@@ -14,25 +14,18 @@ alias Dest3 d3​
 alias Dest4 d4​
 alias Dest5 d5​
 
-alias device r0​
-alias deviceCount r1​
-alias deviceOn r2​
-alias t0 r10​
-
-move deviceCount 5
-​
 start:​
-l deviceOn Source On​
-move device 1​
-loop:
-sle t0 device deviceCount​ # t0 = device <= deviceCount
-blez t0 done # t0 <= 0 -> done
-bdns​ dr0 skip
-s dr0 On deviceOn​
-skip:
-add device device 1 # device++
-j loop
-done:
+l r0 Source On​
+brdns​ d1 2
+s d1 On r0
+brdns​ d2 2
+s d2 On r0
+brdns​ d3 2
+s d3 On r0
+brdns​ d4 2
+s d4 On r0
+brdns​ d5 2
+s d5 On r0
 yield​
 j start</Instructions>
 </InstructionData>
