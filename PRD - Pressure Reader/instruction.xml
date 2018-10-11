@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131836187939062455</DateTime>
-  <Title>PRD - Pressure Reader</Title>
+  <Title>PMON - Pressure Monitor</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Pressure Reader​
-# Model: PR-100​
+  <Instructions># Pressure Monitor
+# Model: PMON-100​
 # https://github.com/dtandersen/stationeers-library​
-alias Pressure d0​
+alias Sensor d0​
 alias Bias d1​
 alias pressure r0​
 alias bias r2​
@@ -16,7 +16,7 @@ alias bias r2​
 move bias 0​
 ​
 start:​
-l pressure Pressure Pressure​
+l pressure Sensor Pressure​
 brdns Bias 2​
 l bias Bias Setting​
 add pressure pressure bias​
