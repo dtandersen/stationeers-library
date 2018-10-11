@@ -8,17 +8,24 @@
   <Instructions># Setting Mirror​
 # Model: SM-100​
 # Mirror Setting var for up to 3 devices​
+alias Source1 d0​
+alias Source2 d1​
+alias Source3 d2​
+alias Dest1 d3​
+alias Dest2 d4​
+alias Dest3 d5​
+​
 alias master r0​
 alias mirror r1​
 alias pair r2​
 alias setting r3​
 alias t0 r10​
+​
 start:​
-yield​
 move pair 0​
 loop:​
 slt t0 pair 3​
-blez t0 start # no more device pairs​
+blez t0 done # no more device pairs​
 move master pair # master device​
 bdns dr0 increment​
 add mirror master 3 # mirrored de​
@@ -27,5 +34,8 @@ l setting dr0 Setting # read Setting​
 s dr1 Setting setting # write Setting​
 increment:​
 add pair pair 1 # increment device pair​
-j loop</Instructions>
+j loop​
+done:​
+yield​
+j start</Instructions>
 </InstructionData>
