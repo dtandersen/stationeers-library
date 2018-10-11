@@ -7,7 +7,7 @@
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Setting Mirror​
 # Model: SSYNC3-100​
-# Mirror Setting var for up to 3 devices​
+# Synchroize Setting between 3 pairs of devices
 alias Source1 d0​
 alias Source2 d1​
 alias Source3 d2​
