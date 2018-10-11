@@ -15,27 +15,24 @@ alias Dest1 d3​
 alias Dest2 d4​
 alias Dest3 d5​
 ​
-alias source r0​
-alias dest r1​
-alias setting r3​
+alias setting r0
 ​
 start:​
-move source 0
-move dest 3
-jal copy
-move source 1
-move dest 4
-jal copy
-move source 2
-move dest 5
-jal copy
+bdns Source1 pair2
+bdns Dest1 pair2
+l setting Source1 Setting
+s Dest1 Setting setting
+:pair2
+bdns Source2 pair3
+bdns Dest2 pair3
+l setting Source2 Setting
+s Dest2 Setting setting
+pair3:
+bdns Source3 done
+bdns Dest3 done
+l setting Source3 Setting
+s Dest3 Setting setting
+done:
 yield​
-j start
-
-copy:
-bdns dr0 ra
-bdns dr1 ra
-l setting dr0 Setting
-s dr1 Setting setting
-j ra</Instructions>
+j start</Instructions>
 </InstructionData>
