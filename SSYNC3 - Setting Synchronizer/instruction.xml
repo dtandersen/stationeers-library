@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131835334477049381</DateTime>
-  <Title>SSYNC - Setting Synchronizer</Title>
+  <Title>SSYNC3 - Setting Synchronizer (3 devices)</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Setting Mirror​
-# Model: SM-100​
+# Model: SSYNC3-100​
 # Mirror Setting var for up to 3 devices​
 alias Source1 d0​
 alias Source2 d1​
@@ -15,27 +15,27 @@ alias Dest1 d3​
 alias Dest2 d4​
 alias Dest3 d5​
 ​
-alias master r0​
-alias mirror r1​
-alias pair r2​
+alias source r0​
+alias dest r1​
 alias setting r3​
-alias t0 r10​
 ​
 start:​
-move pair 0​
-loop:​
-slt t0 pair 3​
-blez t0 done # no more device pairs​
-move master pair # master device​
-bdns dr0 increment​
-add mirror master 3 # mirrored de​
-bdns dr1 increment​
-l setting dr0 Setting # read Setting​
-s dr1 Setting setting # write Setting​
-increment:​
-add pair pair 1 # increment device pair​
-j loop​
-done:​
+move source 0
+move dest 3
+jal copy
+move source 1
+move dest 4
+jal copy
+move source 2
+move dest 5
+jal copy
 yield​
-j start</Instructions>
+j start
+
+copy:
+bdns dr0 ra
+bdns dr1 ra
+l setting dr0 Setting
+s dr1 Setting setting
+j ra</Instructions>
 </InstructionData>
