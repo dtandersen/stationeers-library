@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131824151195877530</DateTime>
-  <Title>Vent Slave</Title>
+  <Title>MSYNC - Mode Synchronizer</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>1523099681</WorkshopFileHandle>

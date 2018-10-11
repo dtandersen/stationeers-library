@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131820872167263785</DateTime>
-  <Title>2-axis Solar Tracking with Park</Title>
+  <Title>STC2A - 2-axis Solar Tracking with Park</Title>
   <Description>The STC2A series solar tracking controller accurately calculate the horizontal and vertical position of the sun for 99-100% solar power collection efficiecy. P series tracking systems feature Zero Configuration Night Park® that pre-positions solar panels to face the rising sun for maximum power.
 
 [table]

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131822040425968780</DateTime>
-  <Title>Air Conditioner</Title>
+  <Title>AC - Air Conditioner</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>1521334355</WorkshopFileHandle>

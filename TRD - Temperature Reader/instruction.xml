@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131825785461729143</DateTime>
-  <Title>Temperature Reader</Title>
+  <Title>TRD - Temperature Reader</Title>
   <Description>Reads temperature from a sensor. Optionally converts to Celsius.</Description>
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>1525362804</WorkshopFileHandle>
