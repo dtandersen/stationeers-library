@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131840295977360051</DateTime>
-  <Title>Prime Encoder</Title>
+  <Title>Prime Bit Encoder</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>1539494357</WorkshopFileHandle>
   <Instructions># Prime Bit Encoder​
 # Model: PBE-100​
+# https://github.com/dtandersen/stationeers-library
 alias Bit0 d0​
 alias Bit1 d1​
 alias Bit2 d2​
@@ -14,6 +15,10 @@ alias Bit3 d3​
 alias Bit4 d4​
 alias Bit5 d5​
 # primes=3, 5, 7, 11, 13, 17​
+# To decode bit:
+# x = bits mod prime
+# x == 0, bit set, x==1, bit not set
+# e.g., 15 mod 3 = 0, bit 0 is set, 15 mod 7 = 1, bit 3 is not set
 start:​
 move r0 1​
 l r1 Bit0 Setting​

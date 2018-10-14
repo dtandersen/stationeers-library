@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131840303250712139</DateTime>
-  <Title>Prime Decoder</Title>
+  <Title>Prime Bit Decoder</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>1539493926</WorkshopFileHandle>
   <Instructions># Prime Bit Decoder​
-# Model: PRD-100​
+# Model: PBD-100​
+# https://github.com/dtandersen/stationeers-library
 alias Bit0 d0​
 alias Bit1 d1​
 alias Bit2 d2​
