@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131840295977360051</DateTime>
+  <Title>Prime Encoder</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>1539494357</WorkshopFileHandle>
+  <Instructions># Prime Bit Encoder​
+# Model: PBE-100​
+alias Bit0 d0​
+alias Bit1 d1​
+alias Bit2 d2​
+alias Bit3 d3​
+alias Bit4 d4​
+alias Bit5 d5​
+# primes=3, 5, 7, 11, 13, 17​
+start:​
+move r0 1​
+l r1 Bit0 Setting​
+brlez r1 2​
+mul r0 r0 3​
+l r1 Bit1 Setting​
+brlez r1 2​
+mul r0 r0 5​
+​l r1 Bit2 Setting​
+brlez r1 2​
+mul r0 r0 7​
+​l r1 Bit3 Setting​
+brlez r1 2​
+mul r0 r0 11​
+​l r1 Bit4 Setting​
+brlez r1 2​
+mul r0 r0 13​
+​​l r1 Bit5 Setting​
+brlez r1 2​
+mul r0 r0 17​
+​s db Setting r0​
+​yield​
+j start</Instructions>
+</InstructionData>

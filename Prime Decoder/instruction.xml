@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131840303250712139</DateTime>
+  <Title>Prime Decoder</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>1539493926</WorkshopFileHandle>
+  <Instructions># Prime Bit Decoder​
+# Model: PRD-100​
+alias Bit0 d0​
+alias Bit1 d1​
+alias Bit2 d2​
+alias Bit3 d3​
+alias Bit4 d4​
+alias Bits d5​
+​# primes=3, 5, 7, 11, 13, 17​
+start:​
+l r0 Bits Setting​
+​mod r1 r0 3​
+seq r1 r1 0​
+​s Bit0 On r1​
+​mod r1 r0 5​
+seq r1 r1 0​
+s Bit1 On r1​
+​mod r1 r0 7​
+seq r1 r1 0​
+s Bit2 On r1​
+​mod r1 r0 11​
+seq r1 r1 0​
+s Bit3 On r1​
+​mod r1 r0 13​
+seq r1 r1 0​
+s Bit4 On r1​
+​yield​
+j start</Instructions>
+</InstructionData>
