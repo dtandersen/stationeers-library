@@ -5,34 +5,34 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># 5-way Power Synchronizer
-# Model: PSYNC5-100
+  <Instructions># 5-way Power Synchronizer​
+# Model: PSYNC5-100​
 alias Source d0​
 alias Dest1 d1​
 alias Dest2 d2​
 alias Dest3 d3​
 alias Dest4 d4​
 alias Dest5 d5​
-
+​
 alias device r0​
 alias deviceCount r1​
 alias deviceOn r2​
 alias t0 r10​
-
-move deviceCount 5
+​
+move deviceCount 5​
 ​
 start:​
 l deviceOn Source On​
 move device 1​
-loop:
-sle t0 device deviceCount​ # t0 = device <= deviceCount
-blez t0 done # t0 <= 0 -> done
-bdns​ dr0 skip
+loop:​
+sle t0 device deviceCount​ # t0 = device &lt;= deviceCount​
+blez t0 done # t0 &lt;= 0 -&gt; done​
+bdns​ dr0 skip​
 s dr0 On deviceOn​
-skip:
-add device device 1 # device++
-j loop
-done:
+skip:​
+add device device 1 # device++​
+j loop​
+done:​
 yield​
 j start</Instructions>
 </InstructionData>
