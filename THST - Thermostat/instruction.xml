@@ -6,12 +6,33 @@
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Model TH-100​
-alias Temperature d0​
-alias Heater d1​
-alias Cooler d2​
+alias Sensor d0​
+alias Cooler d1​
+alias Heater d2​
 alias setpoint r0​
 alias temperature r1​
+alias differential r2​
+alias maxtemp r3​
+alias error r6​
+alias t0 r10​
+move setpoint 293.15​
+move differential 1​
 ​
+justright:​
 l temperature d0 Temperature​
-sgt</Instructions>
+#sub error setpoint temperature​
+add maxtemp setpoint differential​
+sgt t0 temperature maxtemp​
+bgtz t0 toohot​
+s Cooler On 0​
+yield​
+j justright​
+​
+toohot:​
+s Cooler On 1​
+l temperature d0 Temperature​
+sle t0 temperature setpoint​
+bgtz t0 justright​
+yield​
+j toohot</Instructions>
 </InstructionData>
