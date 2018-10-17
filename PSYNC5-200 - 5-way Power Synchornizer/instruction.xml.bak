@@ -6,7 +6,7 @@
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># 5-way Power Synchronizer
-# Model: PSYNC5-200
+# Model: PSYNC5-100
 alias Source d0​
 alias Dest1 d1​
 alias Dest2 d2​
