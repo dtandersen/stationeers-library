@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131835361516850514</DateTime>
+  <Title>FCTRL2 - Furnace Controller mk2</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Furnace Controller​
+# Model: FC-100​
+alias Pressure d0​
+alias Switch d4​
+alias pressure r0​
+alias t1 r1​
+​
+wait:​
+s db Setting 0​
+l t1 Switch Setting​
+beq t1 0 waitdone​
+yield​
+j purge​
+waitdone:​
+yield​
+j wait​
+​
+purge:​
+s db Setting 1​
+l t1 Switch Setting​
+beq t1 0 aa​
+yield​
+j wait​
+aa:​
+l pressure Pressure Setting​
+bne pressure 0 bb​
+yield​
+j regulate​
+bb:​
+yield​
+j purge​
+​
+regulate:​
+s db Setting 2​
+l t1 Switch Setting​
+beq t1 0 cc​
+yield​
+j wait​
+cc:​
+yield​
+j regulate</Instructions>
+</InstructionData>
