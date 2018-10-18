@@ -14,25 +14,54 @@ alias temperature r1​
 alias differential r2​
 alias maxtemp r3​
 alias error r6​
+alias heatOn r7​
+alias coolOn r8​
 alias t0 r10​
 move setpoint 293.15​
 move differential 1​
 ​
 justright:​
+move heatOn 0​
+move coolOn 0​
+j1:​
 l temperature d0 Temperature​
-#sub error setpoint temperature​
-add maxtemp setpoint differential​
-sgt t0 temperature maxtemp​
-bgtz t0 toohot​
-s Cooler On 0​
+sub error setpoint temperature​
+abs t0 error​
+sle t0 t0 differential​
+bgtz t0 ok​
+bltz error toohot​
+bgtz error toocold​
+ok:​
+jal process​
 yield​
-j justright​
+j j1​
 ​
 toohot:​
-s Cooler On 1​
+move heatOn 0​
+move coolOn 1​
+h1:​
 l temperature d0 Temperature​
 sle t0 temperature setpoint​
 bgtz t0 justright​
+jal process​
 yield​
-j toohot</Instructions>
+j h1​
+​
+toocold:​
+move heatOn 1​
+move coolOn 0​
+c1:​
+l temperature d0 Temperature​
+sge t0 temperature setpoint​
+bgtz t0 justright​
+jal process​
+yield​
+j c1​
+​
+process:​
+brdns Heater 2​
+s Heater On heatOn​
+brdns Cooler 2​
+s Cooler On coolOn​
+j ra</Instructions>
 </InstructionData>
