@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131845757845913796</DateTime>
+  <GameVersion>0.2.1774.8154</GameVersion>
+  <Title>VC-100 - Valve Control</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Pressure Release​
+# VC-100​
+alias Sensor d0​
+alias Valve d1​
+alias pressure r1​
+alias setpoint r2​
+alias control r3​
+alias error r4​
+alias kp r5​
+move setpoint 20000​
+move kp 0.1​
+start:​
+l pressure Sensor Pressure​
+sub error pressure setpoint​
+mul error error kp​
+s db Setting error​
+blez error off​
+s Valve On 1​
+s Valve Setting error​
+j done​
+off:​
+s Valve On 0​
+s Valve Setting 100​
+#s db Setting pressure​
+done:​
+yield​
+j start</Instructions>
+</InstructionData>
