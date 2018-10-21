@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131831911159536446</DateTime>
+  <GameVersion>0.2.1774.8154</GameVersion>
   <Title>THST - Thermostat</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Model TH-100​
+  <Instructions># Dual Differential Thermostat (20C)​
+# Model THST-DD20-100​
 alias Sensor d0​
 alias Cooler d1​
-alias Heater d2​
+alias Cooler2 d2​
+alias Heater d3​
+alias Heater2 d4​
 alias setpoint r0​
 alias temperature r1​
 alias differential r2​
@@ -59,9 +63,11 @@ yield​
 j c1​
 ​
 process:​
-brdns Heater 2​
+brdns Heater 3​
 s Heater On heatOn​
-brdns Cooler 2​
+s Heater2 On heatOn​
+brdns Cooler 3​
 s Cooler On coolOn​
+s Cooler2 On coolOn​
 j ra</Instructions>
 </InstructionData>
