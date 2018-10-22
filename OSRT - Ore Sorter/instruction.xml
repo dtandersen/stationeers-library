@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131846593588269969</DateTime>
+  <GameVersion>0.2.1774.8154</GameVersion>
+  <Title>OSRT - Ore Sorter</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias Sorter d0​
+alias hash r1​
+alias oredir r2​
+alias otherdir r3​
+init:​
+# 0=left, 1=right​
+move otherdir 0​
+move oredir 1​
+s Sorter Mode 2​
+s Sorter Output -1​
+start:​
+ls hash Sorter 0 OccupantHash​
+s db Setting hash​
+beq hash 0 done​
+beq hash -707307845 ore # copper​
+beq hash -1348105509 ore # gold​
+beq hash 1758427767 ore # iron​
+beq hash 1103972403 ore # silicon​
+beq hash 1830218956 ore # nickel​
+beq hash -916518678 ore # silver​
+beq hash -190236170 ore # lead​
+s Sorter Output otherdir # not ore​
+j done​
+ore:​
+s Sorter Output oredir​
+#done:​
+#j done​
+#empty:​
+#s Sorter Output -1​
+done:​
+yield​
+j start</Instructions>
+</InstructionData>
