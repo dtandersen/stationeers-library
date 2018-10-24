@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131848285501523811</DateTime>
+  <GameVersion>0.2.1774.8154</GameVersion>
+  <Title>SPL - Inlet Outlet Splitter</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias Inlet1 d0​
+alias Inlet2 d1​
+alias Outlet d2​
+alias device r0​
+alias count r1​
+alias occupied r3​
+alias inoccu r4​
+move device 0​
+s Outlet Open 0​
+yield​
+start:​
+ls occupied Outlet 0 Occupied​
+blez occupied empty​
+s Outlet Open 0​
+mod device count 2​
+wait:​
+ls inoccu dr0 0 Occupied​
+blez inoccu go​
+s db Setting 1​
+yield​
+j wait​
+go:​
+add count count 1​
+beq device 0 dev0​
+s Inlet1 Lock 1​
+s Inlet2 Lock 0​
+j open​
+dev0:​
+s Inlet1 Lock 0​
+s Inlet2 Lock 1​
+open:​
+yield​
+s Outlet Open 1​
+yield​
+s Outlet Open 0​
+#yield​
+j done​
+empty:​
+s Outlet Open 0​
+done:​
+yield​
+j start</Instructions>
+</InstructionData>
