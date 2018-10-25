@@ -15,6 +15,7 @@ alias occupied r3​
 alias inoccu r4​
 move device 0​
 s Outlet Open 0​
+s Outlet Lock 1​
 yield​
 start:​
 ls occupied Outlet 0 Occupied​
