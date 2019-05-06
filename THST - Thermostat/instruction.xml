@@ -69,5 +69,5 @@ s Heater2 On heatOn​
 brdns Cooler 3​
 s Cooler On coolOn​
 s Cooler2 On coolOn​
-j ra</Instructions>
+j r17</Instructions>
 </InstructionData>
