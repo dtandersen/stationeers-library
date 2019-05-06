@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>132016589432104847</DateTime>
+  <GameVersion>0.2.1995.9104</GameVersion>
+  <Title> PPC - Proportional Pressure Controller</Title>
+  <Description>asd​</Description>
+  <Author>onebit(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># PPC-100​
+# Propotional Pressure Controller 1.0​
+alias Analyzer d0​
+alias Overflow d1​
+alias pres r0​
+alias pmax r1​
+alias d r2​
+alias kp r3​
+move pmax 50000​
+move kp 0.25​
+s Analyzer On 1​
+​
+start:​
+yield​
+l pres Analyzer Pressure​
+sub d pres pmax​
+bgt pres pmax open​
+s Overflow On 0​
+j end​
+​
+open:​
+mul d kp d​
+max d 1 d​
+s Overflow Setting d​
+s Overflow On 1​
+​
+end:​
+j start</Instructions>
+</InstructionData>
