@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>131846112006968260</DateTime>
+  <GameVersion>0.2.1774.8154</GameVersion>
+  <Title>Legacy Heater cooler</Title>
+  <Description />
+  <Author>rotiking(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias GasSensor d0​
+alias WC1 d1​
+alias WC2 d2​
+alias Htr1 d3​
+alias Htr2 d4​
+alias Temp r0​
+alias CoolingMin r1​
+alias CoolingMax r2​
+alias CoolingBool r3​
+alias HeatingMin r4​
+alias HeatingMax r5​
+alias HeatingBool r6​
+start:​
+l Temp d0 Temperature​
+Cooling:​
+move r1 298​
+move r2 293​
+#add r3 r3 1​
+sgt r3 Temp CoolingMin​
+s d1 On r3​
+s d2 On r3​
+​
+Heating:​
+move r4 290​
+move r5 296​
+#add r6 r6 4​
+slt r6 Temp HeatingMax​
+s d3 On r6​
+s d4 On r6​
+​
+yield​
+j start</Instructions>
+</InstructionData>
