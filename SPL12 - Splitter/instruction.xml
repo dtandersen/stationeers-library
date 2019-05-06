@@ -6,44 +6,42 @@
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions>alias Inlet1 d0​
+  <Instructions># Splitter
+# Model: SPL12-100
+alias Inlet1 d0​
 alias Inlet2 d1​
 alias Outlet d2​
 alias device r0​
-alias count r1​
+alias inactive r1
+alias count r2
 alias occupied r3​
-alias inoccu r4​
-move device 0​
+alias recvOccupied r4​
+
 s Outlet Open 0​
 s Outlet Lock 1​
-yield​
+
 start:​
-ls occupied Outlet 0 Occupied​
+ls occupied Outlet 0 Occupied​ # check if outlet occupied
 blez occupied empty​
-s Outlet Open 0​
 mod device count 2​
-wait:​
-ls inoccu dr0 0 Occupied​
-blez inoccu go​
+add count count 1​
+mod inactive count 2
+checkRecvReady:​
+ls recvOccupied dr0 0 Occupied​
+blez recvOccupied send
 s db Setting 1​
 yield​
-j wait​
-go:​
-add count count 1​
-beq device 0 dev0​
-s Inlet1 Lock 1​
-s Inlet2 Lock 0​
-j open​
-dev0:​
-s Inlet1 Lock 0​
-s Inlet2 Lock 1​
-open:​
+j checkRecvReady
+send:​
+s db Setting 0
+s device Lock 0​
+s inactive Lock 1​
 yield​
 s Outlet Open 1​
 yield​
 s Outlet Open 0​
-#yield​
 j done​
+
 empty:​
 s Outlet Open 0​
 done:​
