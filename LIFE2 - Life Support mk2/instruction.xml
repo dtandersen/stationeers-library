@@ -17,20 +17,21 @@ alias Unused d5​
 alias device r0 # reserved​
 alias partial r1 # partial pressure of element​
 alias ratio r2 # ratio of element​
-alias temp3 r3​
-alias pressure r6​ # room pressure​
-alias poweron r7​
+alias pressure r3​ # room pressure​
+alias poweron r4​
+alias o2Ok r5​
 alias temp1 r9​
 alias temp2 r10​
+alias temp3 r11​
 alias sp r13​
 alias error r14​
 alias rate r15​
 ​
 define maxPressure 1000​
-define o2Pressure 0.20​
-define co2Pressure 0.02​
-define n2Pressure 0.78​
-define kp 0.05​
+define o2Target 0.20​
+define co2Target 0.02​
+define nTarget 0.78​
+define kp 0.2​
 s GasSensor On 1​
 ​
 start:​
@@ -38,39 +39,47 @@ yield​
 ​
 l pressure GasSensor Pressure​
 s db Setting pressure​
+​
 # oxygen regulation​
 move r0 1​
-l temp1 GasSensor RatioCarbonDioxide​
-l temp2 GasSensor RatioNitrogen​
-max temp3 temp1 temp2​
-min temp3 o2Pressure temp3​
-mul sp temp3 maxPressure # pressure setpoint​
-l ratio GasSensor RatioOxygen # o2 ratio​
+mul sp o2Target maxPressure​
+l ratio GasSensor RatioOxygen​
+div o2Ok ratio o2Target​
+div o2Ok o2Ok 3.0​
 jal calcpid​
 jal setpump​
 ​
 # co2 regulation​
 move r0 2​
-mul sp co2Pressure maxPressure # pressure setpoint​
-l ratio GasSensor RatioCarbonDioxide # o2 ratio​
+l ratio GasSensor RatioCarbonDioxide​
+###​
+l temp1 GasSensor RatioNitrogen​ # read N​
+sub temp1 nTarget temp1         # missing N = target - actual​
+sub temp1 temp1 co2Target​
+max temp1 temp1 0               # missing N = max(n, 0)​
+add temp1 co2Target temp1       # co2Target = co2Target + missingN​
+###​
+mul sp temp1 maxPressure        # sp = co2Target * pressure​
 jal calcpid​
+mul rate rate o2Ok​
 jal setpump​
 ​
 # nitrogen regulation​
 move r0 3​
-mul sp n2Pressure maxPressure # pressure setpoint​
-l ratio GasSensor RatioNitrogen # o2 ratio​
+mul sp nTarget maxPressure # pressure setpoint​
+l ratio GasSensor RatioNitrogen​
 jal calcpid​
+mul rate rate o2Ok​
 jal setpump​
 j start​
 ​
 calcpid:​
 move partial 0​
-beqz pressure nopressure​
-mul partial pressure ratio​
+beqz pressure nopressure # global pressure​
+mul partial pressure ratio # global ratio​
 nopressure:​
 sub error sp partial​
-mul rate kp error​
+mul rate kp error # global rate​
 j ra​
 ​
 setpump:​
