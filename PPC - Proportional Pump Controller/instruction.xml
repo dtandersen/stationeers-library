@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <DateTime>131825817667915545</DateTime>
+  <GameVersion>0.2.1997.9112</GameVersion>
   <Title>PPC - Proportional Pump Controller</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Proportional Pump Controller
-# PPC-102
+  <Instructions># Proportional Pump Controller​
+# PPC-102​
+# Controls up to 5 pumps based on PID value.​
+# PID 0-100=1 device, 101=200=2 devices, etc.​
 # https://github.com/dtandersen/stationeers-library​
-# Controls up to 5 pumps.
-# PID 0-100=1 device, 101=200=2 devices, etc.
+​
 alias PID d0​
 alias device r0​
-alias maxDevices r1
-alias pidout r2
-alias setting r3
-alias t0 r10
+alias maxDevices r1​
+alias pidout r2​
+alias setting r3​
+alias t0 r10​
 ​
 move maxDevices 5​
 ​
@@ -24,22 +26,22 @@ l pidout PID Setting​
 move device 1​
 loop:​
 sle t0 device maxDevices​
-blez t0 done
-bdns dr0 increment
+blez t0 done​
+bdns dr0 increment​
 updatedevice:​
-blez pidout off
+blez pidout off​
 min setting pidout 100​
 s dr0 On 1​
-s dr0 Setting setting
-j increment
+s dr0 Setting setting​
+j increment​
 off:​
 s dr0 On 0​
 s dr0 Setting 0​
-increment:
+increment:​
 sub pidout pidout 100​
 add device device 1​
 j loop​
-done:
+done:​
 yield​
 j start</Instructions>
 </InstructionData>
