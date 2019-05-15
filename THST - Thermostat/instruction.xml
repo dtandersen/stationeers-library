@@ -7,7 +7,7 @@
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Dual Differential Thermostat (20C)​
-# Model THST-DD20-100​
+# Model THST-DD20-101​
 alias Sensor d0​
 alias Cooler d1​
 alias Cooler2 d2​
@@ -63,11 +63,13 @@ yield​
 j c1​
 ​
 process:​
-brdns Heater 3​
+brdns Heater 2​
 s Heater On heatOn​
+brdns Heater2 2​
 s Heater2 On heatOn​
-brdns Cooler 3​
+brdns Cooler 2​
 s Cooler On coolOn​
+brdns Cooler2 2​
 s Cooler2 On coolOn​
 j r17</Instructions>
 </InstructionData>
