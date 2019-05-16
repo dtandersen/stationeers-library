@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DateTime>132024623831300259</DateTime>
+  <GameVersion>0.2.2005.9159</GameVersion>
+  <Title>ATMO - Atmopherics Controller</Title>
+  <Description />
+  <Author>onebit(warg)</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># ATMO​
+# Atmospheric Controller 1.0​
+alias Analyzer d0​
+alias Overflow d1​
+alias InputSensor d2​
+alias Filter d3​
+alias pres r0​
+alias pmax r1​
+alias d r2​
+alias kp r3​
+alias onoff r4​
+move pmax 50000​
+move kp 0.25​
+s Analyzer On 1​
+​
+start:​
+yield​
+l pres Analyzer Pressure​
+sub d pres pmax​
+bgt pres pmax open​
+s Overflow On 0​
+j end​
+​
+open:​
+mul d kp d​
+max d 1 d​
+s Overflow Setting d​
+s Overflow On 1​
+​
+end:​
+check:​
+l pres InputSensor Pressure​
+sgt onoff pres 100​
+s Filter On onoff​
+j start</Instructions>
+</InstructionData>
