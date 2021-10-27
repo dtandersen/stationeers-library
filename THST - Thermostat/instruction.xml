@@ -1,75 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <DateTime>131831911159536446</DateTime>
   <GameVersion>0.2.1774.8154</GameVersion>
   <Title>THST - Thermostat</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Dual Differential Thermostat (20C)​
-# Model THST-DD20-101​
-alias Sensor d0​
-alias Cooler d1​
-alias Cooler2 d2​
-alias Heater d3​
-alias Heater2 d4​
-alias setpoint r0​
-alias temperature r1​
-alias differential r2​
-alias maxtemp r3​
-alias error r6​
-alias heatOn r7​
-alias coolOn r8​
-alias t0 r10​
-move setpoint 293.15​
-move differential 1​
-​
-justright:​
-move heatOn 0​
-move coolOn 0​
-j1:​
-l temperature d0 Temperature​
-sub error setpoint temperature​
-abs t0 error​
-sle t0 t0 differential​
-bgtz t0 ok​
-bltz error toohot​
-bgtz error toocold​
-ok:​
-jal process​
-yield​
-j j1​
-​
-toohot:​
-move heatOn 0​
-move coolOn 1​
-h1:​
-l temperature d0 Temperature​
-sle t0 temperature setpoint​
-bgtz t0 justright​
-jal process​
-yield​
-j h1​
-​
-toocold:​
-move heatOn 1​
-move coolOn 0​
-c1:​
-l temperature d0 Temperature​
-sge t0 temperature setpoint​
-bgtz t0 justright​
-jal process​
-yield​
-j c1​
-​
-process:​
-brdns Heater 2​
-s Heater On heatOn​
-brdns Heater2 2​
-s Heater2 On heatOn​
-brdns Cooler 2​
-s Cooler On coolOn​
-brdns Cooler2 2​
-s Cooler2 On coolOn​
+  <Instructions># Dual Differential Thermostat (20C)
+# Model THST-DD20-101
+# Controls temperature on up to 4 devices,
+# 2 heaters and 2 coolers.
+# To use set the set point and the differential.
+# If SP is 25 and diff is 1 it will turn on
+# heat at 24 and cooling at 26.
+alias Sensor d0    # Atmo sensor
+alias Cooler d1    # Cooling device 1
+alias Cooler2 d2   # Cooling device 2
+alias Heater d3    # Heating device 1
+alias Heater2 d4   # Heating device 2
+alias setpoint r0  # kelvin
+alias temperature r1
+alias differential r2
+alias maxtemp r3
+alias error r6
+alias heatOn r7
+alias coolOn r8
+alias t0 r10
+move setpoint 22.5   # celcius
+add setpoint setpoint 273.15 # now in k
+move differential 1
+
+justright:
+# turn off everything, the temperature is perfect
+move heatOn 0
+move coolOn 0
+j1:
+# compare set point to current temperature
+l temperature d0 Temperature
+sub error setpoint temperature
+abs t0 error
+sle t0 t0 differential
+bgtz t0 ok
+bltz error toohot
+bgtz error toocold
+ok:
+jal process
+yield
+j j1
+
+toohot:
+# turn on cooler
+move heatOn 0
+move coolOn 1
+h1:
+l temperature d0 Temperature
+sle t0 temperature setpoint
+bgtz t0 justright
+jal process
+yield
+j h1
+
+toocold:
+# turn on heater
+move heatOn 1
+move coolOn 0
+c1:
+l temperature d0 Temperature
+sge t0 temperature setpoint
+bgtz t0 justright
+jal process
+yield
+j c1
+
+process:
+brdns Heater 2
+s Heater On heatOn
+brdns Heater2 2
+s Heater2 On heatOn
+brdns Cooler 2
+s Cooler On coolOn
+brdns Cooler2 2
+s Cooler2 On coolOn
 j r17</Instructions>
 </InstructionData>
