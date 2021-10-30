@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132800608739778661</DateTime>
+  <GameVersion>0.2.3033.15104</GameVersion>
+  <Title>PSA - Power Saving Airlock</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># PSA-100
+# Power Saving Airlock v1.0
+#
+# Connect the airlock console and two
+# back pressure regulators to the IC.
+# After you use the airlock the regulators
+# will turn on for a short period to
+# make sure your pipes don't explode.
+#
+# PSA: you can turn off the console to save power
+alias Console d0 # airlock console
+alias IntReg d1  # interior back pressure regulator
+alias ExtReg d2  # exterior
+
+alias device r0
+alias setting r1
+alias lastsetting r2
+alias count r3
+alias maxticks r4
+
+define EXTTICKS 10 # run exterior ticks
+define INTTICKS 20 # run interior ticks
+
+# wait for console setting to change
+start:
+yield
+move lastsetting setting
+l setting Console Setting
+beq setting lastsetting start
+beq 5 setting extopen
+beq 2 setting intopen
+j start
+
+# exterior door is open, drain interior
+extopen:
+move device 1 # IntReg
+move maxticks INTTICKS
+j drain
+
+# interior door is open, drain exterior
+intopen:
+move device 2 # ExtReg
+move maxticks EXTTICKS
+j drain
+
+drain:
+s dr0 On 1 # turn on reg
+move count 0
+
+drainloop:
+yield
+add count count 1
+s db Setting count
+blt count maxticks drainloop
+s dr0 On 0 # turn off reg
+j start</Instructions>
+</InstructionData>
