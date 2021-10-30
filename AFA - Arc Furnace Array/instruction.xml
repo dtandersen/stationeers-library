@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<InstructionData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <DateTime>131846465634079044</DateTime>
   <GameVersion>0.2.1774.8154</GameVersion>
   <Title>AFA - Arc Furnace Array</Title>
   <Description />
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Arc Furnace Array Controller​
-# Model: AFAC6-100​
-alias ArcFurnace d0​
-​
-alias device r0​
-alias hasInput r3​
-alias hasOutput r1​
-alias devices r2​
-alias t0 r10​
-​
-start:​
-move device 0​
-loop:​
-slt t0 device 6 # t0 = device &lt; 6​
-blez t0 done # no more devices​
-bdns dr0 skip # skip unset device​
-ls hasInput dr0 0 Occupied # Import​
-beq hasInput 0 skip​
-ls hasOutput dr0 1 Occupied # Export​
-beq hasOutput 1 skip​
-l t0 dr0 Activate​
-beq t0 1 skip # already activated​
-s dr0 Activate 1​
-skip:​
-add device device 1​
-j loop​
-done:​
-yield​
+  <Instructions># Arc Furnace Array Controller
+# Model: AFAC6-100
+alias ArcFurnace d0
+
+alias device r0
+alias hasInput r3
+alias hasOutput r1
+alias devices r2
+alias t0 r10
+
+start:
+move device 0
+loop:
+slt t0 device 6 # t0 = device &lt; 6
+blez t0 done # no more devices
+bdns dr0 skip # skip unset device
+ls hasInput dr0 0 Occupied # Import
+beq hasInput 0 skip
+ls hasOutput dr0 1 Occupied # Export
+beq hasOutput 1 skip
+l t0 dr0 Activate
+beq t0 1 skip # already activated
+s dr0 Activate 1
+skip:
+add device device 1
+j loop
+done:
+yield
 j start</Instructions>
 </InstructionData>
