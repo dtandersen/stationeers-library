@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132801116685971141</DateTime>
+  <GameVersion>0.2.3034.15108</GameVersion>
+  <Title>LIFE3</Title>
+  <Description>Life suppro​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Life Support 1.0 https://github.com/dtandersen/sta
+alias GasSensor d0
+alias O2Valve d1
+alias CO2Valve d2
+alias N2Valve d3
+alias Unused d4
+alias Unused d5
+
+alias device r0 # reserved
+alias partial r1 # partial pressure of element
+alias ratio r2 # ratio of element
+alias pressure r3 # room pressure
+alias poweron r4
+alias o2Ok r5
+alias temp1 r9
+alias temp2 r10
+alias temp3 r11
+alias sp r13
+alias error r14
+alias rate r15
+
+define maxPressure 100
+define o2Target 0.20  # percentage
+define co2Target 0.02 # percentage
+define nTarget 0.78   # percentage
+define kp 20
+#s GasSensor On 1
+
+start:
+yield
+
+l pressure GasSensor Pressure
+#s db Setting pressure
+
+# oxygen regulation
+move r0 1 # o2
+mul sp o2Target maxPressure
+l ratio GasSensor RatioOxygen
+#div o2Ok ratio o2Target
+#div o2Ok o2Ok 3.0
+mul partial ratio pressure # pp of o2
+s db Setting partial
+jal calcpid
+jal setpump
+
+# co2 regulation
+move r0 2 # co2
+mul sp co2Target maxPressure
+l ratio GasSensor RatioCarbonDioxide
+mul partial ratio pressure # pp of co2
+jal calcpid
+jal setpump
+
+# nitrogen regulation
+move r0 3 # n
+mul sp nTarget maxPressure
+l ratio GasSensor RatioNitrogen
+mul partial ratio pressure # pp of co2
+jal calcpid
+jal setpump
+j start
+
+calcpid:
+# global: partial
+sub error sp partial
+mul rate kp error # global rate
+j ra
+
+setpump:
+# global: rate - pid output
+# global: pressure/maxPressure
+sgtz temp1 rate
+slt temp2 pressure maxPressure
+and poweron temp1 temp2
+s dr0 On poweron
+s dr0 Setting rate
+j ra</Instructions>
+</InstructionData>
