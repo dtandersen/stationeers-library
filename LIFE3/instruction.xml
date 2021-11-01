@@ -14,38 +14,34 @@ alias N2Valve d3
 alias Unused d4
 alias Unused d5
 
-alias device r0 # reserved
-alias partial r1 # partial pressure of element
-alias ratio r2 # ratio of element
+alias device r0 # device to control
+alias partial r1 # partial pressure
+alias ratio r2 # ratio of gas in room
 alias pressure r3 # room pressure
 alias poweron r4
-alias o2Ok r5
+alias setpoint r5
 alias temp1 r9
 alias temp2 r10
 alias temp3 r11
-alias sp r13
 alias error r14
 alias rate r15
 
-define maxPressure 100
-define o2Target 0.20  # percentage
-define co2Target 0.02 # percentage
-define nTarget 0.78   # percentage
-define kp 20
+define maxPressure 101.325
+define o2Target 0.20  # o2 ratio
+define co2Target 0.02 # co2 ratio
+define n2Target 0.78   # n2 ratio
+define kp 5
 #s GasSensor On 1
 
 start:
 yield
 
 l pressure GasSensor Pressure
-#s db Setting pressure
 
 # oxygen regulation
 move r0 1 # o2
-mul sp o2Target maxPressure
+mul setpoint o2Target maxPressure
 l ratio GasSensor RatioOxygen
-#div o2Ok ratio o2Target
-#div o2Ok o2Ok 3.0
 mul partial ratio pressure # pp of o2
 s db Setting partial
 jal calcpid
@@ -53,15 +49,15 @@ jal setpump
 
 # co2 regulation
 move r0 2 # co2
-mul sp co2Target maxPressure
+mul setpoint co2Target maxPressure
 l ratio GasSensor RatioCarbonDioxide
 mul partial ratio pressure # pp of co2
 jal calcpid
 jal setpump
 
 # nitrogen regulation
-move r0 3 # n
-mul sp nTarget maxPressure
+move r0 3 # n2valve
+mul setpoint n2Target maxPressure
 l ratio GasSensor RatioNitrogen
 mul partial ratio pressure # pp of co2
 jal calcpid
@@ -69,16 +65,16 @@ jal setpump
 j start
 
 calcpid:
-# global: partial
-sub error sp partial
+# global: sp, partial, kp
+sub error setpoint partial
 mul rate kp error # global rate
 j ra
 
 setpump:
 # global: rate - pid output
 # global: pressure/maxPressure
-sgtz temp1 rate
-slt temp2 pressure maxPressure
+sgtz temp1 rate # rate &gt; 0
+slt temp2 pressure maxPressure # pressure &lt; max
 and poweron temp1 temp2
 s dr0 On poweron
 s dr0 Setting rate

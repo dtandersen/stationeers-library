@@ -16,9 +16,13 @@ Simpler version that only tries to raise gas levels to the desired percentage.
 # Proportional Pressure Controller (PBFC)
 
 Activates a pump when pressure is exceeded. It turns on at 50MPa by default.
-Probably should be renamed to Proportional Back Pressure Controller.
+Probably should be renamed to Pressure Relief Valve (PRV).
 
 Reads `Pressure` and sets `Setting` on a volume pump.
+
+## PPC - Proportional Pump Controller
+
+Activates up to 5 pumps to control pressure based on PID. If Setting is 50 one pump will turn on at 50%. If Setting is 250 three pumps will turn on, the first two at 100 and the third at 50.
 
 # Production
 
@@ -52,7 +56,6 @@ Reads `Temperature` and controls `On`.
 ## PBE - Prime Bit Encoder
 ## PID
 ## PMC - Pump Monitor and Control
-## PPC - Proportional Pump Controller
 ## PRD - Pressure Reader
 ## PSA - Power Saving Airlock
 ## PSYNC5 - 5-way Power Synchronizer
