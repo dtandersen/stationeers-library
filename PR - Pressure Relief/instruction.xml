@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132802158947099530</DateTime>
+  <GameVersion>0.2.3034.15108</GameVersion>
+  <Title>PR - Pressure Relief</Title>
+  <Description>Life suppro​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Pressure Relief
+# PR
+# https://github.com/dtandersen/stationeers-library
+
+alias Sensor d0
+alias Pump d1
+alias setting r2 # process variable
+alias actual r4 # actual pressure
+#alias setpoint r5 # desired pressure
+alias error r6 # setpoint - actual
+#alias p r7
+alias temp1 r8
+alias count r9
+alias lasterror r10
+alias errorsum r11 # integral error sum
+define Kp 20
+define Ki 5
+define stacksize 20
+define multiplier -1
+define setpoint 50000
+
+loop:
+yield
+bdns Sensor loop
+l actual Sensor Pressure
+
+# error = setpoint - actual
+sub error setpoint actual
+mul error error multiplier
+# caculate error sum
+# sum resides on stack
+mod sp count stacksize
+add sp sp 1
+pop lasterror
+# subtract the last error
+sub errorsum errorsum lasterror
+# add the current error
+add errorsum errorsum error
+push error
+add count count 1
+
+# setting = error * Kp + errorsum * Ki
+mul setting error Kp
+mul temp1 errorsum Ki
+add setting setting temp1
+s db Setting setting
+
+bdns Pump loop
+blez setting off
+s Pump On 1
+s Pump Setting setting
+j loop
+off:
+s Pump On 0
+s Pump Setting 0
+j loop</Instructions>
+</InstructionData>
