@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132812638527765692</DateTime>
+  <GameVersion>0.2.3038.15134</GameVersion>
+  <Title>Counter UI</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Counter UI
+# Model: UI-CNT-100
+alias Counter d0
+alias Inc1 d1
+alias Inc10 d2
+alias Dec1 d3
+alias Dec10 d4
+alias Reset d5
+
+alias is_pushed r1
+alias count r2
+main:
+s Counter On 1
+
+loop:
+yield
+bdns Inc1 skipinc1
+l is_pushed Inc1 Setting
+bgtz is_pushed inc1
+skipinc1:
+bdns Inc10 skipinc10
+l is_pushed Inc10 Setting
+bgtz is_pushed inc10
+skipinc10:
+bdns Dec1 skipdec1
+l is_pushed Dec1 Setting
+bgtz is_pushed dec1
+skipdec1:
+bdns Dec10 skipdec10
+l is_pushed Dec10 Setting
+bgtz is_pushed dec10
+skipdec10:
+bdns Reset skipreset
+l is_pushed Reset Setting
+bgtz is_pushed reset
+skipreset:
+update:
+bltz count reset
+s Counter Setting count
+s db Setting count
+j loop
+
+inc1:
+add count count 1
+j update
+
+inc10:
+add count count 10
+j update
+
+dec1:
+sub count count 1
+j update
+
+dec10:
+sub count count 10
+j update
+
+reset:
+move count 0
+j update</Instructions>
+</InstructionData>
