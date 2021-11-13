@@ -7,7 +7,7 @@
   <Author>rotiking(warg)</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Arc Furnace Array Controller
-# Model: AFAC6-100
+# Model: AFAC6-101
 alias ArcFurnace d0
 
 alias device r0
@@ -22,6 +22,7 @@ loop:
 slt t0 device 6 # t0 = device &lt; 6
 blez t0 done # no more devices
 bdns dr0 skip # skip unset device
+s dr0 On 1
 ls hasInput dr0 0 Occupied # Import
 beq hasInput 0 skip
 ls hasOutput dr0 1 Occupied # Export
