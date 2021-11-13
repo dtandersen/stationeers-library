@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132812680746108513</DateTime>
+  <GameVersion>0.2.3038.15134</GameVersion>
+  <Title>Manufacturing Controller</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Manufacturing Controller
+# Model: CNT-MFT-100
+
+alias Printer d0
+alias Stacker d1
+alias Expected d2
+alias ExpectedDisplay d3
+alias ActualDisplay d4
+
+alias expected r1
+alias actual r2
+alias activated r3
+alias stackerneedsinit r4
+alias initstacker r5
+#alias newlyactivated r4
+main:
+s Printer ClearMemory 1
+s Stacker ClearMemory 1
+move stackerneedsinit 1
+loop:
+yield
+l activated Printer Activate
+
+updatedisplayexpected:
+l expected Expected Setting
+bdns ExpectedDisplay skipdisplayexpected
+s ExpectedDisplay Setting expected
+skipdisplayexpected:
+#s db Setting actual
+
+updatedisplayactual:
+l actual Printer ExportCount
+bdns ActualDisplay skipdisplayactual
+s ActualDisplay Setting actual
+skipdisplayactual:
+s db Setting actual
+
+# if not activated do nothing
+beqz activated loop
+
+and initstacker activated stackerneedsinit
+beqz initstacker dontinit
+initstacker:
+s Stacker Activate 1
+move stackerneedsinit 0
+s Printer ClearMemory 1
+#s Stacker ClearMemory 1
+
+dontinit:
+updatestacker:
+bdns Stacker skipstacker
+s Stacker On 1
+s Stacker Setting expected
+skipstacker:
+
+
+# if actual &lt; expected goto loop
+blt actual expected loop
+
+deactivate:
+s Printer Activate 0
+move stackerneedsinit 1
+j loop</Instructions>
+</InstructionData>
