@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132801257233375570</DateTime>
+  <GameVersion>0.2.3034.15108</GameVersion>
+  <Title>PRVA - Pressure Relief Valve Array</Title>
+  <Description>Life suppro​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Pressure Relief Valve Array
+# PRVA-5
+# Controls up to 5 pumps based on PID value.
+# PID 0-100=1 device, 101=200=2 devices, etc.
+# https://github.com/dtandersen/stationeers-library
+
+alias GasSensor d0
+alias device r0
+alias maxDevices r1
+alias pidout r2
+alias setting r3
+alias pressure r4
+alias setpoint r5
+alias error r6
+alias kp r7
+alias t0 r10
+
+define maxDevices 5
+move setpoint 100 # kPa
+move kp -10
+
+start:
+# read current pressure
+l pressure GasSensor Pressure
+
+# calculate pid
+sub error setpoint pressure
+mul error error kp
+move pidout error
+s db Setting error
+
+move device 1
+loop:
+sle t0 device maxDevices
+blez t0 done
+bdns dr0 increment
+updatedevice:
+blez pidout off
+min setting pidout 100
+s dr0 On 1
+s dr0 Setting setting
+j increment
+off:
+s dr0 On 0
+s dr0 Setting 0
+increment:
+sub pidout pidout 100
+add device device 1
+j loop
+done:
+yield
+j start</Instructions>
+</InstructionData>
