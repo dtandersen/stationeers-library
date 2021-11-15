@@ -23,14 +23,16 @@ alias activated r3
 alias ticks r4
 alias qty r5
 alias lastqty r6
+alias lastrequest r7
 reset:
 s db Setting 1
 jal allon
 s Printer ClearMemory 1
 s Stacker ClearMemory 1
 bne resetstacker 1 nostackerreset
-s Stacker Setting defaultrequest
+move lastrequest defaultrequest
 nostackerreset:
+s Stacker Setting lastrequest
 s Stacker Mode 1
 s Printer Open 0
 move produced 0
@@ -61,6 +63,7 @@ working:
 s db Setting 4
 l requested Stacker Setting
 l produced Printer ExportCount
+move lastrequest requested
 jal updatedisplay
 bge produced requested complete
 l activated Printer Open
@@ -71,7 +74,7 @@ yield
 j working
 complete:
 s Printer Activate 0
-#yield
+yield
 dump:
 s db Setting 9
 move ticks 0
