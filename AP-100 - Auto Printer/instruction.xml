@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132813554892773910</DateTime>
+  <GameVersion>0.2.3038.15134</GameVersion>
+  <Title>AP-100 - Auto Printer</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Auto Printer
+# Model: AP-100
+alias Printer d0
+alias Stacker d1
+alias Requested d3
+alias Produced d4
+define resetstacker 1 # 1 = reset stacker qty
+define defaultrequest 1 # default stack size
+define timeout 120 # timeout in ticks
+alias requested r1
+alias produced r2
+alias activated r3
+alias ticks r4
+
+reset:
+s db Setting 1
+jal allon
+s Printer ClearMemory 1
+s Stacker ClearMemory 1
+bne resetstacker 1 nostackerreset
+s Stacker Setting defaultrequest
+nostackerreset:
+move produced 0
+move ticks 0
+l activated Printer On
+beq activated 0 off
+j idle
+
+idle:
+s db Setting 2
+jal updaterequested
+jal updatedisplay
+l activated Printer Activate
+beq activated 1 working
+bge ticks timeout off
+l activated Printer On
+beq activated 0 off
+add ticks ticks 1
+yield
+j idle
+
+updaterequested:
+l requested Stacker Setting
+j ra
+
+updateproduced:
+l produced Printer ExportCount
+j ra
+
+updatedisplay:
+s Requested Setting requested
+s Produced Setting produced
+j ra
+
+working:
+s db Setting 4
+jal updaterequested
+jal updateproduced
+jal updatedisplay
+bge produced requested complete
+l activated Printer Activate
+beq activated 0 abort
+yield
+j working
+
+complete:
+# all items printed
+s Printer Activate 0
+j wait
+
+abort:
+# printer deacivated for some reason
+yield
+j wait
+
+wait:
+# wait for stacker to fill
+s db Setting 6
+l requested Printer ExportCount
+l produced Stacker ImportCount
+jal updatedisplay
+bge produced requested eject
+yield
+j wait
+
+eject:
+s db Setting 7
+# wait for stacker to import
+yield
+yield
+s Stacker Activate 1
+j reset
+
+off:
+s db Setting 8
+jal alloff
+yield
+j sleep
+
+sleep:
+s db Setting 10
+l activated Printer On
+beq activated 1 on
+yield
+j sleep
+
+on:
+jal allon
+yield
+move ticks 0
+j idle
+
+allon:
+s Printer On 1
+s Stacker On 1
+s Produced On 1
+s Requested On 1
+j ra
+
+alloff:
+s Printer On 0
+s Stacker On 0
+s Produced On 0
+s Requested On 0
+j ra</Instructions>
+</InstructionData>
