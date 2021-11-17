@@ -54,9 +54,9 @@ add ticks ticks 1
 yield
 j idle
 updatedisplay:
-brdns Requested 1
+brdns Requested 2
 s Requested Setting requested
-brdns Produced 1
+brdns Produced 2
 s Produced Setting produced
 j ra
 working:
@@ -70,6 +70,7 @@ l activated Printer Open
 beq activated 1 dump
 l activated Printer Activate
 beq activated 0 complete
+s Stacker Output 1
 yield
 j working
 complete:
