@@ -1,0 +1,91 @@
+<mxfile host="app.diagrams.net" modified="2021-11-20T22:36:05.280Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" etag="aQl-vPvFrNFMfxMBbMQq" version="15.8.3" type="github">
+  <diagram id="WjzMCz5cW0PldS_9bLKK" name="Page-1">
+    <mxGraphModel dx="1662" dy="762" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="rk5oXhjm5HisSccfo7RU-5" value="Printer.Activate = 1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-2" target="rk5oXhjm5HisSccfo7RU-11" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="700" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-9" value="ticks &amp;gt;= timeout&lt;br&gt;or Printer.On = 0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;horizontal=1;" parent="1" source="rk5oXhjm5HisSccfo7RU-2" target="rk5oXhjm5HisSccfo7RU-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-35" value="Printer.Open = 1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-2" target="rk5oXhjm5HisSccfo7RU-26" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-2" value="idle (2)&lt;br&gt;---&lt;br&gt;ticks++&lt;br&gt;requested = Stacker Setting&lt;br&gt;updatedisplay" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" parent="1" vertex="1">
+          <mxGeometry x="480" y="260" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-6" value="produced &amp;gt;= requested&lt;br&gt;or Printer.Activate = 0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-11" target="rk5oXhjm5HisSccfo7RU-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-4" target="rk5oXhjm5HisSccfo7RU-15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-4" value="complete (5)&lt;br&gt;---&lt;br&gt;Printer.Activate = 0&lt;br&gt;yield" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="500" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-10" value="Printer.On = 1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;horizontal=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-28" target="rk5oXhjm5HisSccfo7RU-18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-7" target="rk5oXhjm5HisSccfo7RU-28" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-7" value="off (8)&lt;br&gt;---&lt;br&gt;Printer.On = 0&lt;br&gt;Stacker.On = 0" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" parent="1" vertex="1">
+          <mxGeometry x="320" y="460" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-24" value="Printer.Open = 1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-11" target="rk5oXhjm5HisSccfo7RU-26" edge="1">
+          <mxGeometry x="-0.4406" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-11" value="working (4)&lt;br&gt;---&lt;br&gt;requested = Stacker Setting&lt;br&gt;produced = Printer.ExportCount&lt;br&gt;updatedisplay" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="260" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-17" value="produced &amp;gt;= requested" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-15" target="rk5oXhjm5HisSccfo7RU-26" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="845" y="910" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-15" value="wait (6)&lt;br&gt;---&lt;br&gt;requested = Printer ExportCount&lt;br&gt;produced = Stacker.ImportCount" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="720" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;sketch=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-18" target="rk5oXhjm5HisSccfo7RU-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-18" target="rk5oXhjm5HisSccfo7RU-7" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="405" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-18" value="reset (1)" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=12;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;fontFamily=Helvetica;fontColor=rgba(0, 0, 0, 1);strokeColor=rgba(0, 0, 0, 1);fillColor=rgba(255, 255, 255, 1);html=1;" parent="1" vertex="1">
+          <mxGeometry x="80" y="240" width="240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-21" target="rk5oXhjm5HisSccfo7RU-18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-21" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="180" y="160" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="rk5oXhjm5HisSccfo7RU-26" target="rk5oXhjm5HisSccfo7RU-18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="220" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-26" value="dump (9)&lt;br&gt;---&lt;br&gt;Stacker.Setting = ingotsize" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" parent="1" vertex="1">
+          <mxGeometry x="600" y="720" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-28" value="standby (10)&lt;br&gt;---&lt;br&gt;activated = Printer.On&lt;br&gt;yield" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" parent="1" vertex="1">
+          <mxGeometry x="320" y="600" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rk5oXhjm5HisSccfo7RU-44" value="Stacker.ClearMemory&lt;br&gt;Printer.ClearMemory&lt;br&gt;Printer.Open = 0&lt;br&gt;requested = 1&lt;br&gt;produced = 0&lt;br&gt;Stacker.Setting = requested&lt;br&gt;Stacker.Mode = 1&lt;br&gt;ticks = 0" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="110" y="270" width="180" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
