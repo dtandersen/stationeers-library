@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132816092407082034</DateTime>
+  <GameVersion>0.2.3038.15134</GameVersion>
+  <Title>Pressure Relief Active Vent</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Pressure Relief (Active Vent)
+# PR-AV-100
+# https://github.com/dtandersen/stationeers-library
+alias Sensor d0
+alias Vent d1
+alias pressure r1
+alias active r2
+define setpoint 100
+define pipepressure 45000
+
+main:
+s Vent Mode 1 # inward
+s Vent PressureInternal pipepressure
+
+loop:
+yield
+l pressure Sensor Pressure
+sgt active pressure setpoint
+s Vent On active
+j loop</Instructions>
+</InstructionData>

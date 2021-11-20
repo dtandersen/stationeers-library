@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132818577752195603</DateTime>
+  <GameVersion>0.2.3038.15134</GameVersion>
+  <Title>Pressure Relief with Toxin Detection</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Pressure Relief
+# PR-AV-100
+# https://github.com/dtandersen/stationeers-library
+alias Sensor d0
+alias Vent d1
+alias pressure r1
+alias active r2
+#alias overpressure r3
+alias ratio r4
+#alias toxic r5
+
+define setpoint 100
+define pipepressure 45000
+define maxpollutant 0.005
+define maxvolatiles 0.005
+
+main:
+s Vent Mode 1 # inward
+s Vent PressureInternal pipepressure
+s Vent PressureExternal 0
+
+loop:
+yield
+l ratio Sensor RatioVolatiles
+bgt ratio maxvolatiles toxic
+
+l ratio Sensor RatioPollutant
+s db Setting ratio
+bgt ratio maxpollutant toxic
+
+l pressure Sensor Pressure
+bgt pressure setpoint overpressure
+
+s Vent On 0
+j loop
+
+toxic:
+s Vent PressureExternal 0
+j on
+
+overpressure:
+s Vent PressureExternal setpoint
+#s db Setting 999
+on:
+s Vent On 1
+j loop</Instructions>
+</InstructionData>
