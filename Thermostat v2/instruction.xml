@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132819555471721854</DateTime>
+  <GameVersion>0.2.3038.15134</GameVersion>
+  <Title>Thermostat v2</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Thermostat v2
+# https://github.com/dtandersen/stationeers-library
+alias GasSensor d0
+alias Heater1 d1
+alias Heater2 d2
+alias Led d3
+alias Cooler1 d4
+alias Cooler2 d5
+
+define spinitial 25
+define deadzone 1
+
+alias device r0
+alias maxtemp r1
+alias mintemp r2
+alias temp r3
+alias sp r4
+alias activate r5
+alias color r6
+
+start:
+add sp spinitial 273.15
+add maxtemp sp deadzone
+sub mintemp sp deadzone
+
+idle:
+yield
+move color 2
+jal setcolor
+move activate 0
+move device 1
+jal on
+move device 4
+jal on
+
+l temp GasSensor Temperature
+s db Setting temp
+bgt temp maxtemp cooling
+blt temp mintemp heating
+j idle
+
+cooling:
+yield
+move color 0
+jal setcolor
+l temp GasSensor Temperature
+move activate 1
+move device 4
+jal on
+ble temp sp idle
+j cooling
+
+heating:
+yield
+move color 4
+jal setcolor
+l temp GasSensor Temperature
+move activate 1
+move device 1
+jal on
+bge temp sp idle
+j heating
+
+on:
+brdns dr0 2
+s dr0 On activate
+add device device 1
+brdns dr0 2
+s dr0 On activate
+j ra
+
+setcolor:
+brdns Led 3
+s Led On 1
+s Led Color color
+j ra</Instructions>
+</InstructionData>
