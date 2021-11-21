@@ -1,9 +1,12 @@
-<mxfile host="app.diagrams.net" modified="2021-11-21T06:53:55.602Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" etag="KxUTQnrU-8HhYsgz8dXx" version="15.8.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-11-21T21:08:08.906Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" etag="lRoT1b7Ip17-55pG3Dxe" version="15.8.3" type="github">
   <diagram id="WjzMCz5cW0PldS_9bLKK" name="Page-1">
-    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="705" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="pGxV4Dc_NRkMVQoQ9aw1-36" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Atkinson Hyperlegible;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DAtkinson%2BHyperlegible;fontSize=20;fillColor=none;pointerEvents=0;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="240" width="560" height="600" as="geometry" />
+        </mxCell>
         <mxCell id="pGxV4Dc_NRkMVQoQ9aw1-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Atkinson Hyperlegible;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DAtkinson%2BHyperlegible;fontSize=12;" edge="1" parent="1" source="pGxV4Dc_NRkMVQoQ9aw1-31" target="pGxV4Dc_NRkMVQoQ9aw1-23">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="320" y="420" as="sourcePoint" />
@@ -62,7 +65,7 @@
           <mxGeometry x="240" y="760" width="160" height="40" as="geometry" />
         </mxCell>
         <mxCell id="pGxV4Dc_NRkMVQoQ9aw1-33" value="Thermostat" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=24;fontFamily=Atkinson Hyperlegible;fontStyle=1" vertex="1" parent="1">
-          <mxGeometry x="330" y="200" width="160" height="40" as="geometry" />
+          <mxGeometry x="360" y="200" width="160" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
