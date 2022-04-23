@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132951570912749607</DateTime>
+  <GameVersion>0.2.3224.16134</GameVersion>
+  <Title>ALPR - Airlock Pressur Relief</Title>
+  <Description>​</Description>
+  <Author>Unknown</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># ALPR-100
+# Airlock Pressure Relief
+#
+# Connect the airlock console and two
+# back pressure regulators to the IC.
+# After you use the airlock the regulators
+# will turn on for a short period to
+# make sure your pipes don't explode.
+#
+# PSA: you can turn off the console to save power
+alias Console d0 # airlock console
+alias IntVent d1  # interior vent
+alias ExtVent d2  # exterior vent
+alias IntSensor d4
+alias ExtSensor d5
+
+alias devVent r0
+alias devSensor r1
+alias setting r2
+alias lastSetting r3
+alias pressure r4
+alias sp r5
+
+define MAXPRESSURE 10000
+
+init:
+l setting Console Setting
+mul sp MAXPRESSURE 0.9
+
+# wait for console setting to change
+start:
+yield
+move lastSetting setting
+l setting Console Setting
+s db Setting setting
+beq setting lastSetting start
+beq 5 setting extopen
+beq 2 setting intopen
+j start
+
+# exterior door is open, drain exterior
+extopen:
+move devVent 2
+move devSensor 5
+j drain
+
+# interior door is open, drain interior
+intopen:
+move devVent 1
+move devSensor 4
+j drain
+
+drain:
+s dr1 On 1
+l pressure dr1 Pressure
+ble pressure MAXPRESSURE poweroff
+s dr0 Lock 0
+s dr0 On 1
+s dr0 PressureExternal 150
+s dr0 Mode 0
+
+drainloop:
+yield
+l pressure dr1 Pressure
+s db Setting pressure
+move lastSetting setting
+l setting Console Setting
+bne setting lastSetting interrupt
+bgt pressure sp drainloop
+
+enddrain:
+s dr0 On 0
+
+interrupt:
+s dr0 Mode 1
+
+poweroff:
+s dr0 Lock 1
+yield
+s dr1 On 0
+j start</Instructions>
+</InstructionData>
