@@ -11,7 +11,20 @@ Tries to pad atmosphere with CO2 if there's insufficient nitrogen.
 
 Simpler version that only tries to raise gas levels to the desired percentage.
 
-## Pressure Management
+# Pressure Management
+
+## Airlock
+
+### SMAL - Smart Airlock
+
+Pumps air out of airlock pipes and turns off the console after 30 seconds.
+
+### PC-AV2-HP - Pressure Controller (Active Vent -> Active Vent)
+
+Controls
+
+### PC-VPAV - Pressure Controller (Volume Pump -> Active Vent)
+
 
 # Proportional Pressure Controller (PBFC)
 

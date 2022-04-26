@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132952594540064460</DateTime>
+  <GameVersion>0.2.3227.16140</GameVersion>
+  <Title>PREG - Pressure Regulator</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Atmospheric Reglator
+# https://github.com/dtandersen/stationeers-library
+alias GasSensor d0
+alias Intake d1
+alias Relief d2
+
+define targetpres 101.325
+define deadzone 1
+
+alias device r0
+alias maxtemp r1
+alias maxpres r1
+alias mintemp r2
+alias minpres r2
+alias temp r3
+alias pressure r3
+alias sp r4
+alias activate r5
+alias color r6
+
+init:
+add maxpres targetpres deadzone
+sub minpres targetpres deadzone
+
+loop:
+#s Intake On 0
+#s Relief On 0
+
+
+s Intake Lock 0
+s Intake PressureExternal 0
+s Intake PressureInternal minpres
+s Intake Mode 1
+s Intake On 1
+s Intake Lock 1
+#s db Setting minpres
+#j exit
+s Relief Lock 0
+s Relief PressureExternal maxpres
+s Relief PressureInternal 40000
+s Relief Mode 1
+s Relief On 0
+s Relief Lock 1
+#yield
+#j loop
+exit:</Instructions>
+</InstructionData>

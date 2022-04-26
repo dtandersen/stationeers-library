@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132952596831875964</DateTime>
+  <GameVersion>0.2.3227.16140</GameVersion>
+  <Title>GFG2</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># GFG-200
+# Gas Fuel Generator Controller
+alias GFG d0
+alias GasSensor d1
+alias Unused1 d2
+alias VentCool d3
+alias Battery d4
+alias Unused2 d5
+
+define PRESINSIDE 101
+define PRESOUTSIDE 101
+define PRESPIPE 40000
+define MINCHARGE 0.1
+define MAXTEMPC 23.3333
+
+alias charge r0
+alias activate r1
+alias maxtemp r2
+alias curtemp r3
+
+init:
+move maxtemp 273.15
+add maxtemp maxtemp MAXTEMPC
+#s VentRelief Mode 1
+#s VentRelief PressureExternal 102.325
+#s VentRelief PressureInternal PRESPIPE
+#s VentRelief On 1
+
+s VentCool Mode 1
+s VentCool PressureExternal 0
+s VentCool PressureInternal 110
+s VentCool On 0
+
+start:
+l charge Battery Ratio
+sle activate charge MINCHARGE # charge &lt; MINCHARGE
+s GFG On activate
+
+l curtemp GasSensor Temperature
+sgt activate curtemp maxtemp # curtemp &gt; maxtemp
+s db Setting activate
+s VentCool On activate
+
+yield
+j start</Instructions>
+</InstructionData>
