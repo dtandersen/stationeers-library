@@ -12,37 +12,21 @@ alias GasSensor d0
 alias Intake d1
 alias Relief d2
 
+define SP 101.325
 define hysteresis 1
-define deadband 2
-#alias device r0
+define TOXIC 0.5 #kpa
+
 alias maxpres r1
 alias minpres r2
 alias pressure r3
-#alias spmin r4
-#alias spmax r5
-#alias reliefPres r6
 alias reliefsp r6
-#alias intakePres r11
 alias intakesp r11
-#alias ratioH2 r7
-#alias ratioX r8
-#alias ratioBad r9
-#alias purgeOn r10
 alias hazard r10
-
 alias selector r13
-alias temp r13
 alias temp1 r13
 alias temp2 r14
 
-#define MAXPRES 102
-#define MINPRES 100
-define SP 101.325
-
 init:
-#div temp1 deadband 2
-#move spmin SP
-#move spmax SP
 add maxpres SP hysteresis
 sub minpres SP hysteresis
 s Intake Lock 0
@@ -54,14 +38,11 @@ s Relief On 1
 
 move intakesp minpres
 move reliefsp maxpres
+
 loop:
+l pressure GasSensor Pressure
 jal checkhazard
 
-mul intakesp maxpres 1.1
-
-l pressure GasSensor Pressure
-#bnez hazard pos
-neg:
 slt selector pressure intakesp
 select intakesp selector SP minpres
 
@@ -71,35 +52,28 @@ select reliefsp selector SP maxpres
 beqz hazard safe
 mul intakesp maxpres 1.025
 mul reliefsp minpres 0.975
+
 safe:
-#j set
-#pos:
-#slt selector pressure intakePres
-#select intakePres selector maxpres SP
-
-#sgt selector pressure reliefPres
-#select reliefPres selector minpres SP
-
-set:
-s Intake PressureExternal 0
+s Intake PressureExternal 40000
 s Intake PressureInternal intakesp
 
 s Relief PressureExternal reliefsp
 s Relief PressureInternal 40000
 
-move temp intakesp
-round temp temp
-mul temp temp 100000
-add temp temp reliefsp
-round temp temp
-s db Setting temp
+move temp1 intakesp
+round temp1 temp1
+mul temp1 temp1 100000
+add temp1 temp1 reliefsp
+round temp1 temp1
+s db Setting temp1
 yield
 j loop
 
 checkhazard:
 l temp1 GasSensor RatioVolatiles
 l temp2 GasSensor RatioPollutant
-max temp1 temp1 temp2
-sgt hazard temp1 0.005
+add temp1 temp1 temp2 # volatiles + pollutant
+mul temp1 temp1 pressure # toxins * pressure
+sge hazard temp1 TOXIC
 j ra</Instructions>
 </InstructionData>
