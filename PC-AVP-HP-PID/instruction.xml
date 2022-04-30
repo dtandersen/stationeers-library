@@ -2,11 +2,11 @@
 <InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <DateTime>132956866808378759</DateTime>
   <GameVersion>0.2.3235.16164</GameVersion>
-  <Title>PC-AVP-HP-PID</Title>
+  <Title>PCS-AV2-HP-PID - Pressure Control System 2xAV + Hazard + PID</Title>
   <Description>​</Description>
   <Author>onebit</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># AtmoSETPOINTheric Reglator
+  <Instructions># PCS-AV2-HP-PID - Pressure Control System 2xAV + Hazard + PID
 # https://github.com/dtandersen/stationeers-library
 alias GasSensor d0
 alias VentIn d1
