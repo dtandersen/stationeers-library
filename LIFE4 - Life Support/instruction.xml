@@ -26,11 +26,11 @@ alias temp3 r11
 alias error r14
 alias rate r15
 
-define maxPressure 101.325
+define maxPressure 8000
 define o2Target 0.20  # o2 ratio
 define co2Target 0.02 # co2 ratio
 define n2Target 0.78   # n2 ratio
-define kp 1
+define kp 0.1
 
 init:
 s GasSensor On 1
@@ -42,14 +42,17 @@ l pressure GasSensor Pressure
 # oxygen regulation
 mul setpoint o2Target maxPressure
 l ratio GasSensor RatioOxygen
+jal sanitize
 mul partial ratio pressure # pp of o2
 jal calcpid
+s db Setting partial
 move device 1
 jal setpump
 
 # co2 regulation
 mul setpoint co2Target maxPressure
 l ratio GasSensor RatioCarbonDioxide
+jal sanitize
 mul partial ratio pressure # pp of co2
 jal calcpid
 move device 2
@@ -58,6 +61,7 @@ jal setpump
 # nitrogen regulation
 mul setpoint n2Target maxPressure
 l ratio GasSensor RatioNitrogen
+jal sanitize
 mul partial ratio pressure # pp of n2
 jal calcpid
 move device 3
@@ -81,5 +85,10 @@ bdns dr0 nodevice
 s dr0 On poweron
 s dr0 Setting rate
 nodevice:
+j ra
+
+sanitize:
+bgtz pressure ra
+move ratio 0
 j ra</Instructions>
 </InstructionData>
