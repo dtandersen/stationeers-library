@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132957478831625527</DateTime>
+  <GameVersion>0.2.3237.16169</GameVersion>
+  <Title>EXHAUST-AV</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias Vent1 d0
+
+define VENTS -1129453144
+
+sb VENTS PressureInternal 40000
+sb VENTS PressureExternal 100
+sb VENTS Mode 0
+sb VENTS On 1</Instructions>
+</InstructionData>
