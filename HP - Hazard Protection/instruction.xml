@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132955038613431725</DateTime>
+  <GameVersion>0.2.3230.16145</GameVersion>
+  <Title>HP - Hazard Protection</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># AtmoSETPOINTheric Reglator
+# https://github.com/dtandersen/stationeers-library
+alias GasSensor d0
+alias VentIn d1
+
+define SETPOINT 105
+define TOXIC 0.5 #kpa
+
+alias pp r7
+alias pressure r9
+alias hazard r10
+alias error r11
+alias cv r12
+alias temp1 r13
+alias temp2 r14
+
+init:
+s VentIn Lock 0
+s VentIn On 0
+
+loop:
+l pressure GasSensor Pressure
+jal checkhazard
+beqz hazard off
+
+setvent:
+sub error SETPOINT pressure
+mul error 100 error
+add cv error SETPOINT
+s VentIn PressureExternal 0
+s VentIn PressureInternal cv
+s VentIn On 1
+
+s db Setting pp
+yield
+j loop
+
+checkhazard:
+l temp1 GasSensor RatioVolatiles
+l temp2 GasSensor RatioPollutant
+add temp1 temp1 temp2 # volatiles + pollutant
+mul pp temp1 pressure # toxins * pressure
+sge hazard pp TOXIC
+j ra
+
+off:
+s VentIn On 0
+s db On 0
+j loop
+
+stop2:</Instructions>
+</InstructionData>
