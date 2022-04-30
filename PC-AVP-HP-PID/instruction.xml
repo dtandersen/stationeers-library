@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132956866808378759</DateTime>
+  <GameVersion>0.2.3235.16164</GameVersion>
+  <Title>PC-AVP-HP-PID</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># AtmoSETPOINTheric Reglator
+# https://github.com/dtandersen/stationeers-library
+alias GasSensor d0
+alias VentIn d1
+alias VentOut d2
+alias Hazard d3
+
+define SETPOINT 101.325
+define DIFF 1
+define OVERSHOOT 0.5
+define TOXIC 0.5 #kpa
+define KpIn 20
+define KpOut 2
+
+alias sp r1
+alias error r2
+alias bias r3
+alias pv r4
+alias ventinact r5
+alias ventoutact r6
+alias output r7
+alias kp r8
+alias hazard r10
+alias temp1 r13
+alias temp2 r14
+
+s VentIn Lock 0
+s VentIn Mode 1
+s VentOut Lock 0
+s VentOut Mode 1
+move sp SETPOINT
+sub ventinact SETPOINT DIFF
+add ventoutact SETPOINT DIFF
+
+ok:
+s VentIn On 0
+s VentOut On 0
+l pv GasSensor Pressure
+move kp 1
+move bias sp
+jal calcpid
+#s db Setting ventoutact
+blt pv ventinact lowpressure
+bgt pv ventoutact highpressure
+jal checkhazard
+yield
+j ok
+
+lowpressure:
+l pv GasSensor Pressure
+bgt pv sp ok
+move kp KpIn
+add bias sp OVERSHOOT
+jal calcpid
+s VentIn On 1
+s VentIn PressureExternal 0
+s VentIn PressureInternal output
+jal checkhazard
+yield
+j lowpressure
+
+highpressure:
+l pv GasSensor Pressure
+blt pv sp ok
+move kp KpOut
+sub bias sp OVERSHOOT
+jal calcpid
+#s db Setting output
+s VentOut On 1
+s VentOut PressureExternal output
+s VentOut PressureInternal 40000
+jal checkhazard
+yield
+j highpressure
+
+calcpid:
+sub error sp pv
+mul error kp error
+s db Setting error
+add output bias error
+j ra
+
+checkhazard:
+l temp1 GasSensor RatioVolatiles
+l temp2 GasSensor RatioPollutant
+add temp1 temp1 temp2 # volatiles + pollutant
+mul temp1 temp1 pv # toxins * pressure
+sge hazard temp1 TOXIC
+beqz hazard safe
+s Hazard On 1
+safe:
+j ra</Instructions>
+</InstructionData>
