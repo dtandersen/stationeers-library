@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132957563466127559</DateTime>
+  <GameVersion>0.2.3237.16169</GameVersion>
+  <Title>PCS-VPAV-HP-PID</Title>
+  <Description>​</Description>
+  <Author>Unknown</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># PCS-VPAV-HP-PID
+# Pressure Control System
+# Volume Pump =&gt; Active Vent
+# With hazard protection
+# https://github.com/dtandersen/stationeers-library
+alias GasSensor d0 # Pressure
+alias Supply d1    # Setting
+alias Exhaust d2   # PressureInternal/External
+alias Hazard d3    # On
+
+define SETPOINT 101.325
+define DIFF 1
+define OVERSHOOT 2
+define TOXIC 0.5 #kpa
+define KpIn 10
+define KpOut 2
+
+alias sp r1
+alias error r2
+alias bias r3
+alias pv r4
+alias ventinact r5
+alias ventoutact r6
+alias output r7
+alias kp r8
+alias hazard r10
+alias temp1 r13
+alias temp2 r14
+
+s Supply Lock 0
+s Exhaust Lock 0
+s Exhaust Mode 1
+move sp SETPOINT
+sub ventinact SETPOINT DIFF
+add ventoutact SETPOINT DIFF
+
+ok:
+s Supply On 0
+s Exhaust On 0
+l pv GasSensor Pressure
+blt pv ventinact lowpressure
+bgt pv ventoutact highpressure
+move kp 1
+move bias sp
+jal calcpid
+jal checkhazard
+yield
+j ok
+
+lowpressure:
+l pv GasSensor Pressure
+bgt pv sp ok
+move kp KpIn
+add bias 0 5
+#move bias 0
+jal calcpid
+s Supply On 1
+s Supply Setting output
+jal checkhazard
+yield
+j lowpressure
+
+highpressure:
+l pv GasSensor Pressure
+blt pv sp ok
+move kp KpOut
+sub bias sp OVERSHOOT
+jal calcpid
+s Exhaust On 1
+s Exhaust PressureExternal output
+s Exhaust PressureInternal 40000
+jal checkhazard
+yield
+j highpressure
+
+calcpid:
+sub error sp pv
+mul error kp error
+s db Setting error
+add output bias error
+j ra
+
+checkhazard:
+l temp1 GasSensor RatioVolatiles
+l temp2 GasSensor RatioPollutant
+add temp1 temp1 temp2 # volatiles + pollutant
+mul temp1 temp1 pv # toxins * pressure
+sge hazard temp1 TOXIC
+beqz hazard safe
+s Hazard On 1
+safe:
+j ra</Instructions>
+</InstructionData>
