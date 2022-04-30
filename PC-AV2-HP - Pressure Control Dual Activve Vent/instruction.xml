@@ -2,78 +2,95 @@
 <InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <DateTime>132954138310147748</DateTime>
   <GameVersion>0.2.3229.16142</GameVersion>
-  <Title>PC-AV2-HP - Pressure Control Dual Activve Vent</Title>
+  <Title>PCS-AV2-HP - Pressure Control System 2xAV + Hazard</Title>
   <Description>​</Description>
   <Author>Unknown</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Atmospheric Reglator
+  <Instructions># PCS-AV2-HP - Pressure Control System / 2 Active Vents / Hazard Protection
 # https://github.com/dtandersen/stationeers-library
 alias GasSensor d0
-alias Intake d1
-alias Relief d2
+alias VentIn d1
+alias VentOut d2
+alias Hazard d3
 
-define SP 101.325
-define hysteresis 1
+define SETPOINT 101.325
+define DIFF 1
+define OVERSHOOT 0.5
 define TOXIC 0.5 #kpa
 
-alias maxpres r1
-alias minpres r2
-alias pressure r3
-alias reliefsp r6
-alias intakesp r11
+alias lowtarget r1
+alias hightarget r2
+alias ventinsetting r3
+alias ventoutsetting r4
+alias ventinsp r5
+alias ventoutsp r6
+alias ventinact r7
+alias ventoutact r8
+alias pressure r9
+alias presok r11 # pressure OK
 alias hazard r10
-alias selector r13
 alias temp1 r13
 alias temp2 r14
 
 init:
-add maxpres SP hysteresis
-sub minpres SP hysteresis
-s Intake Lock 0
-s Intake Mode 1
-s Intake On 1
-s Relief Lock 0
-s Relief Mode 1
-s Relief On 1
+sub ventinact SETPOINT DIFF
+move ventinsp SETPOINT
+add ventoutact SETPOINT DIFF
+move ventoutsp SETPOINT
 
-move intakesp minpres
-move reliefsp maxpres
+s VentIn Lock 0
+s VentIn Mode 1
+s VentIn On 1
+s VentOut Lock 0
+s VentOut Mode 1
+s VentOut On 1
+
+move ventinsetting ventinact
+move ventoutsetting ventoutact
 
 loop:
 l pressure GasSensor Pressure
-jal checkhazard
 
-slt selector pressure intakesp
-select intakesp selector SP minpres
-
-sgt selector pressure reliefsp
-select reliefsp selector SP maxpres
+jal checkhazardx
 
 beqz hazard safe
-mul intakesp maxpres 1.025
-mul reliefsp minpres 0.975
-
+s Hazard On 1
 safe:
-s Intake PressureExternal 40000
-s Intake PressureInternal intakesp
+sge presok pressure ventinsetting
+select ventinsetting presok ventinact ventinsp
+#add ventinsetting ventinsetting OVERSHOOT
 
-s Relief PressureExternal reliefsp
-s Relief PressureInternal 40000
+sle presok pressure ventoutsetting
+select ventoutsetting presok ventoutact ventoutsp
+#sub ventoutsetting ventoutsetting OVERSHOOT
+#sle presok pressure ventoutsetting
+setvent:
+s VentIn PressureExternal 0
+s VentIn PressureInternal ventinsetting
 
-move temp1 intakesp
+s VentOut PressureExternal ventoutsetting
+s VentOut PressureInternal 40000
+
+move temp1 ventinsetting
 round temp1 temp1
 mul temp1 temp1 100000
-add temp1 temp1 reliefsp
+add temp1 temp1 ventoutsetting
 round temp1 temp1
 s db Setting temp1
 yield
 j loop
 
-checkhazard:
+checkhazardx:
 l temp1 GasSensor RatioVolatiles
 l temp2 GasSensor RatioPollutant
 add temp1 temp1 temp2 # volatiles + pollutant
 mul temp1 temp1 pressure # toxins * pressure
 sge hazard temp1 TOXIC
-j ra</Instructions>
+j ra
+
+#hazard:
+#mul ventinsetting hightarget 1.025
+#mul ventoutsetting lowtarget 0.975
+
+#j setvent</Instructions>
 </InstructionData>
