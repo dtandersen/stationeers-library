@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132957698764875721</DateTime>
+  <GameVersion>0.2.3237.16169</GameVersion>
+  <Title>BP - Beacon Pulser</Title>
+  <Description>​</Description>
+  <Author>Unknown</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Beacon Pulser
+# Model BP-100
+alias Beacon d0    # Beacon
+
+define pw_on 4     # beacon active in ticks
+                   # e.g. 6 = 3 seconds
+define duty_cycle .15 # percent of time on
+                   # e.g. .25 = 25%
+
+alias period r2    # ticks for on/off cycle
+alias pw_off r3    # beacon inactive in ticks
+alias tick_count r4  # timer
+alias active r5    # beacon on/off
+
+init:
+div period pw_on duty_cycle
+trunc period period
+sub pw_off period pw_on
+
+loop:
+mod tick_count tick_count period
+slt active tick_count pw_on
+s Beacon On active
+add tick_count tick_count 1
+yield
+j loop</Instructions>
+</InstructionData>
