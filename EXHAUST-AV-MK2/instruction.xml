@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132958417596669172</DateTime>
+  <GameVersion>0.2.3237.16169</GameVersion>
+  <Title>EXHAUST-AV-MK2</Title>
+  <Description>​</Description>
+  <Author>Unknown</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias O2Relief d0
+alias CO2Relief d1
+alias N2Relief d2
+alias H2Relief d3
+alias XRelief d4
+
+alias device r0
+#define VENTS -1129453144
+
+move device 0
+jal set
+move device 1
+jal set
+move device 2
+jal set
+move device 3
+jal set
+move device 4
+jal set
+
+set:
+s dr0 PressureInternal 50000
+s dr0 PressureExternal 130
+s dr0 Mode 0
+s dr0 On 1
+j ra</Instructions>
+</InstructionData>
