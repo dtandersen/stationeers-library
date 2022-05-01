@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132958606208640511</DateTime>
+  <GameVersion>0.2.3237.16169</GameVersion>
+  <Title>GMC - Gas Mixer Control</Title>
+  <Description>​</Description>
+  <Author>Unknown</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Gas Mixer Control
+alias GasSensor d0
+alias Mixer d1
+
+alias pressure r0
+alias poweron r1
+
+define MAXPRESSURE 1000
+init:
+s Mixer Setting 80
+
+loop:
+l pressure GasSensor Pressure
+s db Setting pressure
+sle poweron pressure MAXPRESSURE
+s Mixer On poweron
+yield
+j loop</Instructions>
+</InstructionData>
