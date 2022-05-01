@@ -32,7 +32,7 @@ define o2Target 0.20  # percentage
 define co2Target 0.02 # percentage
 define nTarget 0.78   # percentage
 define kp 1
-0#s GasSensor On 1
+#s GasSensor On 1
 s O2Disp Mode 0
 s CO2Disp Mode 0
 s NDisp Mode 0
