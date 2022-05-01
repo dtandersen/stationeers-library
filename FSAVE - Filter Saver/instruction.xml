@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132958415423737135</DateTime>
+  <GameVersion>0.2.3237.16169</GameVersion>
+  <Title>FSAVE - Filter Saver</Title>
+  <Description>​</Description>
+  <Author>Unknown</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Filter Saver
+alias GasSensor d0
+alias O2Filter d1
+alias CO2Filter d2
+alias N2Filter d3
+alias H2Filter d4
+alias XFilter d5
+
+alias device r0
+alias ratio r1
+alias pressure r2
+alias pp r3
+alias poweron r4
+
+loop:
+l pressure GasSensor Pressure
+
+l ratio GasSensor RatioOxygen
+mul pp ratio pressure
+move device 1
+jal filter
+
+l ratio GasSensor RatioCarbonDioxide
+mul pp ratio pressure
+move device 2
+jal filter
+
+l ratio GasSensor RatioNitrogen
+mul pp ratio pressure
+move device 3
+jal filter
+
+l ratio GasSensor RatioVolatiles
+mul pp ratio pressure
+move device 4
+jal filter
+
+l ratio GasSensor RatioPollutant
+mul pp ratio pressure
+move device 5
+jal filter
+
+yield
+j loop
+
+filter:
+bdns dr0 ra
+sge poweron pp 95
+s dr0 On poweron
+j ra</Instructions>
+</InstructionData>
