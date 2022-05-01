@@ -6,7 +6,7 @@
   <Description>​</Description>
   <Author>onebit</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># AtmoSETPOINTheric Reglator
+  <Instructions># HP - Hazard Protection
 # https://github.com/dtandersen/stationeers-library
 alias GasSensor d0
 alias VentIn d1
@@ -14,8 +14,16 @@ alias VentIn d1
 define SETPOINT 105
 define TOXIC 0.5 #kpa
 
+#alias lowtarget r1
+#alias hightarget r2
+#alias ventinsetting r3
+#alias ventoutsetting r4
+#alias ventinsetpoint r5
+#alias ventoutsetpoint r6
 alias pp r7
+#alias ventoutact r8
 alias pressure r9
+#alias presok r11 # pressure OK
 alias hazard r10
 alias error r11
 alias cv r12
@@ -23,13 +31,30 @@ alias temp1 r13
 alias temp2 r14
 
 init:
+#j stop2
+#sub lowtarget SETPOINT DIFF
+#add hightarget SETPOINT DIFF
+
 s VentIn Lock 0
+#s VentIn Mode 1
 s VentIn On 0
+#s VentOut Lock 0
+#s VentOut Mode 1
+#s VentOut On 1
+
+#move ventinsetting lowtarget
+#move ventoutsetting hightarget
 
 loop:
 l pressure GasSensor Pressure
 jal checkhazard
 beqz hazard off
+
+#sge presok pressure ventinsetting
+#select ventinsetting presok lowtarget SETPOINT
+
+#sle presok pressure ventoutsetting
+#select ventoutsetting presok hightarget SETPOINT
 
 setvent:
 sub error SETPOINT pressure
@@ -37,9 +62,19 @@ mul error 100 error
 add cv error SETPOINT
 s VentIn PressureExternal 0
 s VentIn PressureInternal cv
+s VentIn Mode 1
 s VentIn On 1
 
+#s VentOut PressureExternal ventoutsetting
+#s VentOut PressureInternal 40000
+
+#move temp1 ventinsetting
+#round temp1 temp1
+#mul temp1 temp1 100000
+#add temp1 temp1 ventoutsetting
+#round temp1 temp1
 s db Setting pp
+#s db Setting 2
 yield
 j loop
 
@@ -50,6 +85,11 @@ add temp1 temp1 temp2 # volatiles + pollutant
 mul pp temp1 pressure # toxins * pressure
 sge hazard pp TOXIC
 j ra
+
+#hazard:
+#mul ventinsetting hightarget 1.025
+#mul ventoutsetting lowtarget 0.975
+#j setvent
 
 off:
 s VentIn On 0
