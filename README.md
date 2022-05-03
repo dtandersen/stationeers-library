@@ -19,11 +19,20 @@ Simpler version that only tries to raise gas levels to the desired percentage.
 
 Pumps air out of airlock pipes and turns off the console after 30 seconds.
 
-### PC-AV2-HP - Pressure Controller (Active Vent -> Active Vent)
+| Device    | Description     |
+| --------- | --------------- |
+| Console   | Airlock console |
+| IntVent   | Interior active vent |
+| ExtVent   | Exterior active vent |
+| GasSensor | Gas sensor |
+| IntSensor | Interior pipe analyzer |
+| ExtSensor | Exterior pipe analyzer |
+
+### PCS-AV2-HP - Pressure Controller (Active Vent -> Active Vent)
 
 Controls
 
-### PC-VPAV - Pressure Controller (Volume Pump -> Active Vent)
+### PCS-VPAV - Pressure Controller (Volume Pump -> Active Vent)
 
 
 # Proportional Pressure Controller (PBFC)
