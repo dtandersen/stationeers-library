@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132959394231394922</DateTime>
+  <GameVersion>0.2.3237.16169</GameVersion>
+  <Title>VAV</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias GasSensor d0
+alias Pump d1
+alias Heater d2
+alias Return d3
+
+alias presout r0
+alias rate r1
+alias temperature r2
+alias tempout r3
+alias VOLUME r4
+alias hazard r5
+alias pressure r6
+alias output r7
+alias kp r8
+alias setpoint r9
+alias pv r10
+alias overpres r11
+alias temp1 r12
+alias temp2 r13
+alias temp3 r14
+
+define TICKSPERDAY 2400
+define CELLS 25
+define LPERCELL 8000
+define ACM 0.1 # air change per day
+define ACDMIN 0.1
+define ACDMAX 1
+define TOXIC 0.5
+define PUMPMIN 4
+define SUPPRES 1000 # supply pressure
+define MAXPRES 125
+
+mul VOLUME CELLS LPERCELL
+loop:
+l pressure GasSensor Pressure
+
+l temp1 GasSensor RatioVolatiles
+l temp2 GasSensor RatioPollutant
+add temp1 temp1 temp2 # sum(h2, x)
+mul temp1 temp1 pressure # pp of toxin
+sge hazard temp1 TOXIC
+sge temp1 pressure MAXPRES
+or hazard hazard temp1
+
+l temperature GasSensor Temperature
+slt temp1 temperature 295.483
+s Heater On temp1
+
+select temp1 hazard 0 101.325
+s Return Mode 1
+s Return PressureInternal 50000
+s Return PressureExternal temp1
+s Return On 1
+
+move setpoint 101.325
+move kp 50
+move pv pressure
+jal calcpid
+move presout output
+
+move setpoint 296.483
+move kp -100
+move pv temperature
+jal calcpid
+move tempout output
+#s db Setting tempout
+max rate presout tempout
+max rate rate PUMPMIN
+div temp1 101.325 SUPPRES
+mul rate temp1 rate
+select rate hazard 0 rate
+s db Setting rate
+s Pump Setting rate
+#seqz temp1 hazard
+s Pump On 1
+
+# PV=nRT
+# n=PV/RT
+#l temp1 GasSensor Pressure # P
+#mul temp1 temp1 1000
+#mul temp1 temp1 200 # PV
+#l temp2 GasSensor Temperature # T
+#mul temp2 temp2 8.314 # RT
+#div mols temp1 temp2 # n=PV/RT
+#s db Setting mols
+yield
+j loop
+
+calcpid:
+# input: setpoint kp
+# output: output
+sub temp1 setpoint pv # error
+mul output kp temp1 # kp * error
+#s db Setting output
+j ra</Instructions>
+</InstructionData>
