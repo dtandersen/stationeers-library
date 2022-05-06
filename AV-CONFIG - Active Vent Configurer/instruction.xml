@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132959410480359469</DateTime>
+  <GameVersion>0.2.3237.16169</GameVersion>
+  <Title>AV-SETTER</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># AV-CONFIG - Active Vent Configurer
+# Configures up to six active vents
+
+# CONFIG
+define PRESINT 45000 # stress 48636, burst 60795
+define PRESEXT 250
+define MODE 0 # 0=Outward (Pipe->Ext), 1= Inward (Ext->Pipe)
+define ON 1
+define LOCK 1
+
+alias Vent1 d0
+alias Vent2 d1
+alias Vent3 d2
+alias Vent4 d3
+alias Vent5 d4
+alias Vent6 d5
+
+alias device r0
+
+init:
+move device 0
+s db Setting -1
+
+loop:
+bge device 6 end 
+jal configure
+add device device 1
+j loop
+
+configure:
+bdns dr0 nodevice
+s dr0 Mode MODE # bug: set Mode first or it resets!
+s dr0 PressureInternal PRESINT
+s dr0 PressureExternal PRESEXT
+s dr0 On ON
+s dr0 Lock LOCK
+nodevice:
+j ra
+
+end:
+s db Setting 0</Instructions>
+</InstructionData>
