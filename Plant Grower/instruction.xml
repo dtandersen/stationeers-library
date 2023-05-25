@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133293717912539186</DateTime>
+  <GameVersion>0.2.4090.19329</GameVersion>
+  <Title>Plant Grower</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias DaySensor d0
+alias Light d1
+alias TempSensor d2
+alias Cooler d3
+alias Heater d4
+
+alias daytime r0
+alias temperature r1
+alias cooldown r2
+alias heatup r3
+alias coolsp r4
+alias heatsp r5
+
+define MINTEMP 22.3333 #74F
+define MAXTEMP 24.3333 #74F
+add coolsp MAXTEMP 273.15
+add heatsp MINTEMP 273.15
+
+loop:
+l daytime DaySensor Activate
+sb -1758710260 On daytime
+
+l temperature TempSensor Temperature
+sgt cooldown temperature coolsp
+s Cooler On cooldown
+slt heatup temperature heatsp
+s Heater On heatup
+
+yield
+j loop</Instructions>
+</InstructionData>

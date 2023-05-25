@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132971223159702173</DateTime>
+  <GameVersion>0.2.3263.16264</GameVersion>
+  <Title>DISH</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias Dish d0
+alias VDial d1
+alias HDial d2
+alias Auto d3
+
+alias hangle r0
+alias vangle r1
+alias statex r2
+alias temp1 r13
+
+define HSTEP 4
+
+init:
+div temp1 360 5
+s HDial Mode temp1
+div temp1 90 5
+s VDial Mode temp1
+
+move vangle 45
+l hangle Dish Horizontal
+s Dish Vertical vangle
+
+start:
+l statex Auto Setting
+beq statex 0 manual
+beq statex 1 startsweep
+yield
+j start
+
+startsweep:
+#move hangle 0
+sweep:
+s Dish Horizontal hangle
+s db Setting hangle
+mod temp1 hangle 360
+div temp1 hangle 5
+trunc temp1 temp1
+s HDial Setting temp1
+
+l temp1 VDial Setting
+mul vangle 5 temp1
+s Dish Vertical vangle
+
+l statex Auto Setting
+beq statex 0 manual
+add hangle hangle HSTEP
+bge hangle 360 sweepdone
+yield
+j sweep
+sweepdone:
+#s Auto Open 0
+rand vangle
+mul vangle vangle 90
+div vangle vangle 5
+trunc vangle vangle
+mul vangle vangle 5
+s Dish Vertical vangle
+div temp1 vangle 5
+trunc temp1 temp1
+s VDial Setting temp1
+move hangle 0
+s HDial Setting 0
+j startsweep
+
+manual:
+l temp1 HDial Setting
+mul hangle temp1 5
+s Dish Horizontal hangle
+
+l temp1 VDial Setting
+mul vangle temp1 5
+s Dish Vertical vangle
+l statex Auto Setting
+beq statex 1 startsweep
+yield
+j manual</Instructions>
+</InstructionData>

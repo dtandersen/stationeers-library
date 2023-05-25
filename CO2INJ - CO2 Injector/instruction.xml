@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132971228555919723</DateTime>
+  <GameVersion>0.2.3263.16264</GameVersion>
+  <Title>CO2INJ - CO2 Injector</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define CO2PP 0.5
+
+alias Sensor d0
+alias Pump d1
+
+alias pressure r0
+alias pp r1
+alias ratio r2
+alias inject r3
+
+loop:
+l pressure Sensor Pressure
+l ratio Sensor RatioCarbonDioxide
+mul pp ratio pressure
+s db Setting pp
+slt inject pp CO2PP
+s Pump On inject
+s Pump Setting 1
+yield
+j loop</Instructions>
+</InstructionData>

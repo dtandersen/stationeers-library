@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132961119388932828</DateTime>
+  <GameVersion>0.2.3240.16180</GameVersion>
+  <Title>SMAL-200</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># SMAL-200
+# Smart Airlock
+#
+# Connect the airlock console, two active vents,
+# and two pipe sensors.
+# After you use the airlock the vents
+# are automatically depressurized.
+# CONFIG
+define MAXPRESSURE 30000
+define INTPRES 105
+define EXTPRES 135
+define TIMEOUT 60
+
+alias Console d0
+alias IntVent d1
+alias ExtVent d2
+alias GasSensor d3
+alias IntSensor d4
+alias ExtSensor d5
+
+alias setting r2
+alias ticks r6
+alias intopen r8
+alias extopen r9
+
+init:
+s IntVent Mode 0
+s IntVent PressureInternal MAXPRESSURE
+s IntVent PressureExternal INTPRES
+s IntVent Lock 1
+
+s ExtVent Mode 0
+s ExtVent PressureInternal MAXPRESSURE
+s ExtVent PressureExternal EXTPRES
+s ExtVent Lock 1
+
+loop:
+l setting Console Setting
+seq intopen setting 2
+seq extopen setting 5
+s IntVent On intopen
+s ExtVent On extopen
+yield
+j loop
+
+reset:
+move ticks 0
+
+idle:
+bge ticks TIMEOUT powersave
+add ticks ticks 1
+yield
+j idle
+
+powersave:
+s Console On 0
+s IntSensor On 0
+s ExtSensor On 0
+standby:
+l temp Console On
+beq temp 1 reset
+yield
+j ra</Instructions>
+</InstructionData>

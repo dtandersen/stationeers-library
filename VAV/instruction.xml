@@ -6,7 +6,8 @@
   <Description>​</Description>
   <Author>onebit</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions>alias GasSensor d0
+  <Instructions># VAV
+alias GasSensor d0
 alias Pump d1
 alias Heater d2
 alias Return d3

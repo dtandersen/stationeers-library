@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132971424273808968</DateTime>
+  <GameVersion>0.2.3263.16264</GameVersion>
+  <Title>ACTEMP</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define MINTEMP 24
+define CTOK 273.15
+alias Sensor d0
+alias Cooler1 d1
+alias Cooler2 d2
+
+alias temperature r0
+alias cool r1
+alias setpoint r2
+
+add setpoint MINTEMP CTOK
+
+loop:
+l temperature Sensor Temperature
+sgt cool temperature setpoint
+s Cooler1 On cool
+s Cooler2 On cool
+yield
+j loop</Instructions>
+</InstructionData>

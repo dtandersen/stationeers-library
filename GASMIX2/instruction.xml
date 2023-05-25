@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132976649485496587</DateTime>
+  <GameVersion>0.2.3276.16318</GameVersion>
+  <Title>GASMIX2</Title>
+  <Description>​</Description>
+  <Author>Unknown</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Gas Mixer Control
+alias GasSensor d0
+alias Mixer d1
+alias H2Pump d2
+alias H2Sensor d3
+alias O2Pump d4
+alias O2Sensor d5
+
+alias pressure r0
+alias poweron r1
+alias temp r2
+alias presok r3
+alias tempok r4
+alias o2ok r5
+alias h2ok r6
+
+define MAXPRESSURE 1000
+define MAXTEMP 288.15 # 15c
+define INPUT1 67
+define PUMPRATE 10
+
+init:
+s Mixer Setting INPUT1
+s H2Pump Setting PUMPRATE
+s O2Pump Setting PUMPRATE
+s GasSensor On 1
+s H2Sensor On 1
+s O2Sensor On 1
+loop:
+l temp H2Sensor Temperature
+slt h2ok temp MAXTEMP
+l temp O2Sensor Temperature
+slt o2ok temp MAXTEMP
+l pressure GasSensor Pressure
+slt presok pressure MAXPRESSURE
+#s db Setting pressure
+and poweron h2ok o2ok
+and poweron poweron presok
+s Mixer On poweron
+
+l pressure H2Sensor Pressure
+slt presok pressure MAXPRESSURE
+s H2Pump On presok
+
+l pressure O2Sensor Pressure
+slt presok pressure MAXPRESSURE
+s O2Pump On presok
+
+yield
+j loop</Instructions>
+</InstructionData>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132961086663713362</DateTime>
+  <GameVersion>0.2.3240.16180</GameVersion>
+  <Title>AC</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># ac control
+alias AC d0
+alias GasSensor d1
+alias Heater d2
+alias HeatValve d3
+alias CoolValve d4
+
+alias temperature r0
+alias poweron r1
+alias setpoint r2
+alias heating r3
+alias cooling r4
+alias highsp r5
+alias lowsp r6
+
+move setpoint 273.15
+add setpoint setpoint 15
+sub lowsp setpoint 1
+add highsp setpoint 1
+
+loop:
+#s AC Setting -200
+l temperature GasSensor Temperature
+s db Setting temperature
+sgt poweron temperature highsp
+s CoolValve On poweron
+slt poweron temperature lowsp
+s HeatValve On poweron
+
+s AC On 1
+s Heater On 1
+yield
+j loop</Instructions>
+</InstructionData>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132976712356824073</DateTime>
+  <GameVersion>0.2.3276.16318</GameVersion>
+  <Title>GFG - Simple</Title>
+  <Description>​</Description>
+  <Author>Unknown</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># GFG-300
+# Gas Fuel Generator Controller
+alias GFG d0
+alias Battery d1
+
+define MINCHARGE 0.1
+
+alias charge r0
+alias activate r1
+
+start:
+l charge Battery Ratio
+sle activate charge MINCHARGE # charge &lt; MINCHARGE
+s GFG On activate
+
+yield
+j start</Instructions>
+</InstructionData>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>132968890070583878</DateTime>
+  <GameVersion>0.2.3262.16260</GameVersion>
+  <Title>SMARTSUIT</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define MINO2PP 25
+define MINPRESEXT 20
+define MAXTEMP 323.15
+
+alias Helmet d0
+alias Jetpack d1
+
+alias pressure r0
+alias ppo2 r1
+alias ratioo2 r2
+alias open r3
+alias extpres r4
+alias presbad r5
+alias tempbad r6
+alias exttemp r7
+alias hazard r9
+
+loop:
+l pressure db Pressure
+l ratioo2 db RatioOxygen
+mul ppo2 ratioo2 pressure
+slt open ppo2 MINO2PP
+s db Filtration open
+
+l open Helmet Open
+beqz open done
+l extpres db PressureExternal
+slt presbad extpres MINPRESEXT
+
+l exttemp db TemperatureExternal
+sgt tempbad exttemp MAXTEMP
+
+or hazard presbad tempbad
+beqal hazard 1 closehelm
+
+
+done:
+yield
+j loop
+
+closehelm:
+s Helmet Open 0
+j ra</Instructions>
+</InstructionData>
