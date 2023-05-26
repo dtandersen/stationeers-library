@@ -1,0 +1,10 @@
+{
+    // Your current settings. Don't forget to put comma symbol...
+    // ...at the end of your current settings last object.
+    "files.associations": {
+        "*.xml": "xml"
+    },
+    "[xml]": {
+        "editor.formatOnSave": false
+    }
+}
