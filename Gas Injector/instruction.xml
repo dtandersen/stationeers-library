@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133296083042145919</DateTime>
+  <GameVersion>0.2.4094.19353</GameVersion>
+  <Title>Gas Injector</Title>
+  <Description>test​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias GasSensor d0
+alias Pump d1
+
+alias pressure r0
+alias ratio r1
+alias pp r2
+define K 0.5
+alias rate r4
+alias cutin r5
+
+define PPMAX 0.5
+
+loop:
+l pressure GasSensor Pressure
+l ratio GasSensor RatioVolatiles
+mul pp ratio pressure
+sub rate PPMAX pp
+mul rate K rate
+s db Setting rate
+s Pump Setting rate
+sgtz cutin rate
+s Pump On cutin
+
+yield
+j loop</Instructions>
+</InstructionData>
