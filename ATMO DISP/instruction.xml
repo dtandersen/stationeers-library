@@ -6,86 +6,65 @@
   <Description>Life suppro​</Description>
   <Author>onebit</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Life Support 1.0 https://github.com/dtandersen/sta
+  <Instructions># Life Support 1.0
+# https://github.com/dtandersen/sta
 alias GasSensor d0
 alias O2Disp d1
 alias CO2Disp d2
 alias NDisp d3
-alias Unused d4
-alias Unused d5
+alias H2Display d4
+alias XDisplay d5
 
-alias device r0 # reserved
-alias partial r1 # partial pressure of element
-alias ratio r2 # ratio of element
 alias pressure r3 # room pressure
-alias poweron r4
-alias o2Ok r5
-alias temp1 r9
-alias temp2 r10
-alias temp3 r11
-alias sp r13
-alias error r14
-alias rate r15
+alias ratio r2 # ratio of gas
+alias partial r1 # partial pressure of gas
 
-define maxPressure 100
-define o2Target 0.20  # percentage
-define co2Target 0.02 # percentage
-define nTarget 0.78   # percentage
-define kp 1
-#s GasSensor On 1
+init:
+brdns O2Disp 2
 s O2Disp Mode 0
+brdns CO2Disp 2
 s CO2Disp Mode 0
+brdns NDisp 2
 s NDisp Mode 0
+brdns H2Display 2
+s H2Display Mode 0
+brdns XDisplay 2
+s XDisplay Mode 0
 
 start:
-yield
-
 l pressure GasSensor Pressure
-#s db Setting pressure
 
-# oxygen regulation
-#move r0 1 # o2
-#mul sp o2Target maxPressure
+o2:
+bdns O2Disp co2
 l ratio GasSensor RatioOxygen
-#div o2Ok ratio o2Target
-#div o2Ok o2Ok 3.0
-mul partial ratio pressure # pp of o2
+mul partial ratio pressure
 s O2Disp Setting partial
-#jal calcpid
-#jal setpump
 
-# co2 regulation
-move r0 2 # co2
-#mul sp co2Target maxPressure
+co2:
+bdns CO2Disp n2
 l ratio GasSensor RatioCarbonDioxide
 mul partial ratio pressure # pp of co2
 s CO2Disp Setting partial
-#jal calcpid
-#jal setpump
 
-# nitrogen regulation
-move r0 3 # n
-#mul sp nTarget maxPressure
+n2:
+bdns NDisp h2
 l ratio GasSensor RatioNitrogen
 mul partial ratio pressure # pp of co2
 s NDisp Setting partial
-#jal calcpid
-#jal setpump
-j start
 
-calcpid:
-# global: partial
-sub error sp partial
-mul rate kp error # global rate
-j ra
+h2:
+bdns H2Display x
+l ratio GasSensor RatioVolatiles
+mul partial ratio pressure # pp of co2
+s H2Display Setting partial
 
-setpump:
-# global: rate - pid output
-# global: pressure/maxPressure
-sgtz temp1 rate
-slt temp2 pressure maxPressure
-and poweron temp1 temp2
-s dr0 On poweron
-s dr0 Setting rate
-j ra</Instructions>
+x:
+bdns XDisplay done
+l ratio GasSensor RatioPollutant
+mul partial ratio pressure # pp of co2
+s XDisplay Setting partial
+
+done:
+yield
+j start</Instructions>
 </InstructionData>
