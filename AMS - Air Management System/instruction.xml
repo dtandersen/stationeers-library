@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133295464211205307</DateTime>
+  <GameVersion>0.2.4093.19347</GameVersion>
+  <Title>AMS - Air Management System</Title>
+  <Description>test​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># All in one life support
+# Controls pv and pressure
+# https://github.com/dtandersen/stationeers-library
+alias GasSensor d0
+alias Heater d1
+alias Cooler d2
+alias Air d4
+alias Waste d5
+
+define TEMPHOT 28
+define TEMPCOLD 22
+define PMIN 92
+define PMAX 98
+define TEMPDIFF 1
+define PRESDIFF 1
+define MAXX 0.45
+define MAXH2 0.01
+
+alias sphot r0
+alias spcold r1
+alias pp r2
+alias pv r3
+alias pressure r3
+alias temp2 r4
+alias toohigh r5
+alias toolow r6
+alias spair r7
+alias spwaste r8
+alias ratio r9
+alias lowo2 r10
+alias tmin r12
+alias tmax r13
+alias hazard r14
+alias temp1 r15
+
+init:
+add sphot TEMPHOT 273.15
+add spcold TEMPCOLD 273.15
+sub spcold spcold TEMPDIFF
+move spair PMIN
+move spwaste PMAX
+
+loop:
+heatmode:
+l pv GasSensor Temperature
+bdns Heater coolmode
+add temp1 TEMPCOLD 273.15
+sub tmin temp1 TEMPDIFF
+add tmax temp1 TEMPDIFF
+slt toolow pv spcold
+select spcold toolow tmax tmin
+s Heater On toolow
+#sub temp1 spcold 273.15
+#s db Setting temp1
+
+coolmode:
+bdns Cooler waste
+add temp1 TEMPHOT 273.15
+sub tmin temp1 TEMPDIFF
+add tmax temp1 TEMPDIFF
+sgt toohigh pv sphot
+select sphot toohigh tmin tmax
+s Cooler On toohigh
+#sub temp1 sphot 273.15
+#s db Setting temp1
+
+l pressure GasSensor Pressure
+jal detecthazard
+s db Setting hazard
+waste:
+#s db Setting pressure
+bdns Waste air
+move temp1 PMAX
+sub tmin temp1 PRESDIFF
+add tmax temp1 PRESDIFF
+sgt toohigh pressure spwaste
+select spwaste toohigh tmin tmax
+or toohigh toohigh hazard
+s Waste On toohigh
+#sub temp1 sphot 273.15
+#s db Setting spwaste
+
+air:
+bdns Air done
+l ratio GasSensor RatioOxygen
+mul pp ratio pressure
+slt lowo2 pp 20
+move temp1 PMIN
+sub tmin temp1 PRESDIFF
+add tmax temp1 PRESDIFF
+slt toolow pressure spair
+select spair toolow tmax tmin
+or toolow toolow lowo2
+#move temp1 hazard
+not temp1 hazard
+and toolow toolow temp1
+s Air On toolow
+j done
+
+done:
+yield
+j loop
+
+detecthazard:
+l ratio GasSensor RatioVolatiles
+mul pp ratio pressure
+sgt hazard pp MAXH2
+
+l temp1 GasSensor RatioPollutant
+add ratio ratio temp1
+mul pp ratio pressure
+sge temp1 pp MAXX
+or hazard hazard temp1
+j ra</Instructions>
+</InstructionData>
