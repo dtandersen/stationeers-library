@@ -6,8 +6,8 @@
   <Description>test​</Description>
   <Author>onebit</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># All in one life support
-# Controls pv and pressure
+  <Instructions># Air Management System
+# Controls temperature and pressure
 # https://github.com/dtandersen/stationeers-library
 alias GasSensor d0
 alias Heater d1
@@ -92,16 +92,17 @@ air:
 bdns Air done
 l ratio GasSensor RatioOxygen
 mul pp ratio pressure
-slt lowo2 pp 20
+slt lowo2 pp 25
 move temp1 PMIN
 sub tmin temp1 PRESDIFF
 add tmax temp1 PRESDIFF
 slt toolow pressure spair
 select spair toolow tmax tmin
-or toolow toolow lowo2
+#or toolow toolow lowo2
 #move temp1 hazard
 not temp1 hazard
 and toolow toolow temp1
+or toolow toolow lowo2
 s Air On toolow
 j done
 
