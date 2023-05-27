@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133296799000146574</DateTime>
+  <GameVersion>0.2.4094.19353</GameVersion>
+  <Title>Atmospherics Monitor</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Atmospherics Monitor
+# https://github.com/dtandersen/stationeers-library
+alias GasSensor d0
+alias O2Pressure d1
+alias CO2Pressure d2
+alias N2Pressure d3
+alias H2Pressure d4
+alias XPressure d5
+
+alias device r0
+alias pressure r1 # overall pressure
+alias ratio r2 # ratio of gas
+alias partial r3 # partial pressure of gas
+alias o2pp r4
+alias n2pp r5
+alias co2pp r6
+alias h2pp r7
+alias xpp r8
+alias no2pp r9
+alias color r10
+alias temp1 r11
+alias toxin r12
+
+define LED HASH("StructureConsoleLED5")
+define O2H HASH("O2 Display")
+define OK 2
+define ERROR 4
+define WARN 5
+define O2ERROR 20
+define O2WARN 25
+define TOXINMAX 0.5
+define TOXINWARN 0.1
+define H2MAX 0.01
+define H2WARN 0
+
+init:
+move device 1
+initloop:
+bgt device 5 start
+bdns dr0 nodevice
+s dr0 On 1
+s dr0 Mode 0
+s dr0 Color OK
+nodevice:
+add device device 1
+j initloop
+
+start:
+l pressure GasSensor Pressure
+l ratio GasSensor RatioOxygen
+mul o2pp ratio pressure
+l ratio GasSensor RatioCarbonDioxide
+mul co2pp ratio pressure
+l ratio GasSensor RatioNitrogen
+mul n2pp ratio pressure
+l ratio GasSensor RatioVolatiles
+mul h2pp ratio pressure
+l ratio GasSensor RatioPollutant
+mul xpp ratio pressure
+add toxin xpp h2pp
+
+
+
+o2:
+bdns O2Pressure co2
+#s O2Pressure Setting o2pp
+sbn LED O2H Setting o2pp
+slt temp1 o2pp O2WARN
+select color temp1 WARN OK
+slt temp1 o2pp O2ERROR
+select color temp1 ERROR color
+s O2Pressure Color color
+
+co2:
+bdns CO2Pressure n2
+s CO2Pressure Setting co2pp
+
+n2:
+bdns N2Pressure h2
+s N2Pressure Setting n2pp
+
+h2:
+bdns H2Pressure x
+s H2Pressure Setting h2pp
+sgt temp1 h2pp H2WARN
+select color temp1 WARN OK
+sge temp1 h2pp H2MAX
+select color temp1 ERROR color
+s H2Pressure Color color
+
+x:
+bdns XPressure done
+s XPressure Setting xpp
+sgt temp1 toxin TOXINWARN
+select color temp1 WARN OK
+sge temp1 toxin TOXINMAX
+select color temp1 ERROR color
+s XPressure Color color
+
+done:
+yield
+j start</Instructions>
+</InstructionData>

@@ -2,6 +2,14 @@
 
 Reads gas sensor and controls volume pumps to bring atmosphere to desired Oxygen, CO2, and N2 level.
 
+## Atmospherics Display
+
+Displays partial pressure of up to 5 gases.
+
+## Atmospherics Monitor
+
+Displays partial pressure gases.
+
 ## LIFE
 ## LIFE2
 
