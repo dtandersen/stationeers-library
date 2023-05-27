@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133296374996757974</DateTime>
+  <GameVersion>0.2.4094.19353</GameVersion>
+  <Title>Breathable Air Mixer</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Breathable Air Mixer
+# https://github.com/dtandersen/sta
+alias GasSensor d0
+alias O2Supply d1
+alias N2Supply d2
+alias Unused d3
+alias Unused d4
+alias Unused d5
+
+alias device r0 # device to control
+alias partial r1 # partial pressure
+alias ratio r2 # ratio of gas in room
+alias pressure r3 # room pressure
+alias poweron r4
+alias setpoint r5
+alias temp1 r9
+alias temp2 r10
+alias temp3 r11
+alias error r14
+alias rate r15
+
+define maxPressure 1000
+define o2Target 0.21
+define n2Target 0.79
+define kp 2
+
+init:
+s GasSensor On 1
+s GasSensor Lock 1
+
+start:
+l pressure GasSensor Pressure
+bgt pressure maxPressure overpressure
+
+# oxygen regulation
+mul setpoint o2Target maxPressure
+l ratio GasSensor RatioOxygen
+jal sanitize
+mul partial ratio pressure
+jal calcpid
+s db Setting partial
+move device 1
+jal setpump
+
+# nitrogen regulation
+mul setpoint n2Target maxPressure
+l ratio GasSensor RatioNitrogen
+jal sanitize
+mul partial ratio pressure
+jal calcpid
+move device 2
+jal setpump
+done:
+yield
+j start
+
+overpressure:
+s O2Supply On 0
+s N2Supply On 0
+j done
+
+calcpid:
+# global: sp, partial, kp
+sub error setpoint partial
+mul rate kp error # global rate
+j ra
+
+setpump:
+# global: rate - pid output
+# global: pressure/maxPressure
+sgtz temp1 rate # rate &gt; 0
+slt temp2 pressure maxPressure # pressure &lt; max
+and poweron temp1 temp2
+bdns dr0 nodevice
+s dr0 On poweron
+s dr0 Setting rate
+nodevice:
+j ra
+
+sanitize:
+bgtz pressure ra
+move ratio 0
+j ra</Instructions>
+</InstructionData>
