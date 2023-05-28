@@ -29,8 +29,14 @@ alias color r10
 alias temp1 r11
 alias toxin r12
 
-define LED HASH("StructureConsoleLED5")
-define O2H HASH("O2 Display")
+define DISPHASH HASH("StructureConsoleLED5")
+define O2HASH HASH("O2 Pressure")
+define N2HASH HASH("N2 Pressure")
+define CO2HASH HASH("CO2 Pressure")
+define H2HASH HASH("H2 Pressure")
+define XHASH HASH("X Pressure")
+define NO2HASH HASH("NO2 Pressure")
+
 define OK 2
 define ERROR 4
 define WARN 5
@@ -40,6 +46,8 @@ define TOXINMAX 0.5
 define TOXINWARN 0.1
 define H2MAX 0.01
 define H2WARN 0
+define NO2MAX 5
+define NO2WARN 1
 
 init:
 move device 1
@@ -65,45 +73,47 @@ l ratio GasSensor RatioVolatiles
 mul h2pp ratio pressure
 l ratio GasSensor RatioPollutant
 mul xpp ratio pressure
+l ratio GasSensor RatioNitrousOxide
+mul no2pp ratio pressure
 add toxin xpp h2pp
 
-
-
 o2:
-bdns O2Pressure co2
-#s O2Pressure Setting o2pp
-sbn LED O2H Setting o2pp
 slt temp1 o2pp O2WARN
 select color temp1 WARN OK
 slt temp1 o2pp O2ERROR
 select color temp1 ERROR color
-s O2Pressure Color color
+sbn DISPHASH O2HASH Setting o2pp
+sbn DISPHASH O2HASH Color color
 
 co2:
-bdns CO2Pressure n2
-s CO2Pressure Setting co2pp
+sbn DISPHASH CO2HASH Setting co2pp
 
 n2:
-bdns N2Pressure h2
-s N2Pressure Setting n2pp
+sbn DISPHASH N2HASH Setting n2pp
 
 h2:
-bdns H2Pressure x
-s H2Pressure Setting h2pp
 sgt temp1 h2pp H2WARN
 select color temp1 WARN OK
-sge temp1 h2pp H2MAX
+sgt temp1 h2pp H2MAX
 select color temp1 ERROR color
-s H2Pressure Color color
+sbn DISPHASH H2HASH Setting h2pp
+sbn DISPHASH H2HASH Color color
 
 x:
-bdns XPressure done
-s XPressure Setting xpp
 sgt temp1 toxin TOXINWARN
 select color temp1 WARN OK
-sge temp1 toxin TOXINMAX
+sgt temp1 toxin TOXINMAX
 select color temp1 ERROR color
-s XPressure Color color
+sbn DISPHASH XHASH Setting xpp
+sbn DISPHASH XHASH Color color
+
+no2:
+sgt temp1 no2pp NO2WARN
+select color temp1 WARN OK
+sgt temp1 no2pp NO2MAX
+select color temp1 ERROR color
+sbn DISPHASH NO2HASH Setting no2pp
+sbn DISPHASH NO2HASH Color color
 
 done:
 yield
