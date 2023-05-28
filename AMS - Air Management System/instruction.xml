@@ -47,6 +47,8 @@ add spcold TEMPCOLD 273.15
 sub spcold spcold TEMPDIFF
 move spair PMIN
 move spwaste PMAX
+s Waste PressureInternal 40000
+s Waste Mode 1
 
 loop:
 heatmode:
@@ -74,9 +76,7 @@ s Cooler On toohigh
 
 l pressure GasSensor Pressure
 jal detecthazard
-#s db Setting hazard
 waste:
-#s db Setting pressure
 bdns Waste air
 move temp1 PMAX
 sub tmin temp1 PRESDIFF
@@ -85,8 +85,6 @@ sgt toohigh pressure spwaste
 select spwaste toohigh tmin tmax
 or toohigh toohigh hazard
 s Waste On toohigh
-#sub temp1 sphot 273.15
-#s db Setting spwaste
 
 air:
 bdns Air done
@@ -121,7 +119,6 @@ s db Setting 3
 done:
 yield
 j loop
-
 detecthazard:
 l ratio GasSensor RatioVolatiles
 mul pp ratio pressure
