@@ -74,7 +74,7 @@ s Cooler On toohigh
 
 l pressure GasSensor Pressure
 jal detecthazard
-s db Setting hazard
+#s db Setting hazard
 waste:
 #s db Setting pressure
 bdns Waste air
@@ -92,20 +92,32 @@ air:
 bdns Air done
 l ratio GasSensor RatioOxygen
 mul pp ratio pressure
-slt lowo2 pp 25
+slt lowo2 pp 18
 move temp1 PMIN
 sub tmin temp1 PRESDIFF
 add tmax temp1 PRESDIFF
 slt toolow pressure spair
 select spair toolow tmax tmin
-#or toolow toolow lowo2
-#move temp1 hazard
 not temp1 hazard
 and toolow toolow temp1
 or toolow toolow lowo2
+beqz toolow toohighcheck
 s Air On toolow
+add temp1 PMAX 1
+s Air PressureExternal temp1
+s db Setting 1
 j done
-
+toohighcheck:
+blt pp 23 turnoff
+bgtz hazard turnoff
+s Air On 1
+add temp1 pressure 0.25
+s Air PressureExternal temp1
+s db Setting 2
+j done
+turnoff:
+s Air On 0
+s db Setting 3
 done:
 yield
 j loop
@@ -114,7 +126,6 @@ detecthazard:
 l ratio GasSensor RatioVolatiles
 mul pp ratio pressure
 sgt hazard pp MAXH2
-
 l temp1 GasSensor RatioPollutant
 add ratio ratio temp1
 mul pp ratio pressure
