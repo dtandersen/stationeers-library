@@ -24,10 +24,11 @@ alias extpres r0
 alias manualclosed r1
 alias ratio r2
 alias open r3
-alias autoopened r4
+alias stayclosed r5
 alias exttemp r7
+alias exppos r8
 alias hazard r9
-alias autoclosed r10
+alias oop r10
 alias temp1 r11
 alias pp r12
 alias extreme r13
@@ -45,8 +46,9 @@ l open Helmet Open
 not temp1 open
 s Suit AirRelease temp1
 # remain autoclosed if helmet is not open
-and manualclosed autoopened temp1
-and manualopened autoclosed open
+sne oop exppos open
+and manualclosed oop temp1
+and manualopened oop open
 beqal manualopened 1 manuallyopened
 beqal manualclosed 1 manuallyclosed
 beq open 0 checkopen
@@ -55,25 +57,25 @@ done:
 yield
 j loop
 manuallyopened:
-s Helmet SoundAlert 29
+s Helmet SoundAlert 20
 move hazard 0
-move autoopened 0
-move autoclosed 0
+move exppos 1
+move stayclosed 0
 j ra
 manuallyclosed:
-s Helmet SoundAlert 30
-move autoopened 0
-move autoclosed 0
+s Helmet SoundAlert 21
+move exppos 0
+move stayclosed 1
 j ra
 checkopen:
 # don't open helmet if manually opened
-beq autoclosed 0 done
+beq stayclosed 1 done
 # don't open helmet if hazardous
 beq hazard 1 done
 beq extreme 1 done
-move autoopened 1
-s Helmet SoundAlert 21
+s Helmet SoundAlert 20
 s Helmet Open 1
+move exppos 1
 j done
 checkclose:
 beq extreme 1 autoclose
@@ -123,6 +125,6 @@ move hazard 1
 j ra
 autoclose:
 s Helmet Open 0
-move autoclosed 1
+move exppos 0
 j done</Instructions>
 </InstructionData>
