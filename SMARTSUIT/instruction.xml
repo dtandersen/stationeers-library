@@ -7,46 +7,94 @@
   <Author>onebit</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions>define MINO2PP 25
-define MINPRESEXT 20
-define MAXTEMP 323.15
+define MAXTEMP 50
+define MINTEMP 10
+define MAXTOXIN 0.45
+define MAXNO2 4.5
+define CTOK 273.15
 
 alias Helmet d0
 alias Jetpack d1
 
-alias pressure r0
-alias ppo2 r1
-alias ratioo2 r2
+alias suitpres r0
+alias suitppo2 r1
+alias ratio r2
 alias open r3
 alias extpres r4
 alias presbad r5
 alias tempbad r6
 alias exttemp r7
 alias hazard r9
+alias autoclosed r10
+alias temp1 r11
+alias pp r12
 
 loop:
-l pressure db Pressure
-l ratioo2 db RatioOxygen
-mul ppo2 ratioo2 pressure
-slt open ppo2 MINO2PP
+l suitpres db Pressure
+l ratio db RatioOxygen
+mul suitppo2 ratio suitpres
+slt open suitppo2 MINO2PP
 s db Filtration open
 
 l open Helmet Open
-beqz open done
-l extpres db PressureExternal
-slt presbad extpres MINPRESEXT
-
-l exttemp db TemperatureExternal
-sgt tempbad exttemp MAXTEMP
-
-or hazard presbad tempbad
-beqal hazard 1 closehelm
-
-
+not temp1 open
+# remain autoclosed if helmet is not open
+and autoclosed autoclosed temp1
+jal checkhazard
+beq open 0 checkopen
+beq open 1 checkclose
 done:
 yield
 j loop
 
-closehelm:
+checkopen:
+# don't open helmet if manually opened
+beq autoclosed 0 done
+# don't open helmet if hazardous
+beq hazard 1 done
+s Helmet Open 1
+move autoclosed 0
+j done
+
+checkclose:
+beq hazard 1 autoclose
+j done
+
+checkhazard:
+#close if o2 is too low
+l extpres db PressureExternal
+l ratio db RatioOxygen
+mul pp ratio extpres
+blt pp MINO2PP hazarddetected
+
+#close if toxins are present
+l ratio db RatioPollutant
+l temp1 db RatioVolatiles
+add ratio ratio temp1
+mul pp ratio extpres
+bge pp MAXTOXIN hazarddetected
+
+# close if no2 is present
+l ratio db RatioNitrousOxide
+mul pp ratio extpres
+bge pp MAXNO2 hazarddetected
+
+#close if temp is extreme
+l exttemp db TemperatureExternal
+add temp1 MAXTEMP CTOK
+bge exttemp temp1 hazarddetected
+add temp1 MINTEMP CTOK
+ble exttemp temp1 hazarddetected
+
+move hazard 0
+j ra
+
+hazarddetected:
+move hazard 1
+j ra
+
+autoclose:
 s Helmet Open 0
-j ra</Instructions>
+move autoclosed 1
+j done</Instructions>
 </InstructionData>
