@@ -19,30 +19,32 @@ alias Suit db
 alias Helmet d0
 alias Jetpack d1
 
-alias suitpres r0
-alias extpres r0
-alias manualclosed r1
-alias ratio r2
-alias open r3
+alias pressure r0
+alias manualopened r1
+alias manualclosed r2
+alias ratio r3
+alias open r4
 alias stayclosed r5
-alias exttemp r7
-alias exppos r8
-alias hazard r9
-alias oop r10
-alias temp1 r11
-alias pp r12
-alias extreme r13
-alias manualopened r14
+alias temperature r6
+alias exppos r7 # expected helmet position
+alias oop r8 # helmet out of position
+alias temp1 r9
+alias pp r10
+alias extreme r11
+alias alert r12
+
 s Helmet Volume 50
 loop:
-l suitpres Suit Pressure
+l pressure Suit Pressure
 l ratio Suit RatioOxygen
-mul pp ratio suitpres
+mul pp ratio pressure
 slt open pp MINO2PP
 s Suit Filtration open
 jal checkhazard
 l open Helmet Open
-#xor helmetchanged open lastopen
+beq open 0 skipalert
+s Helmet SoundAlert alert
+skipalert:
 not temp1 open
 s Suit AirRelease temp1
 # remain autoclosed if helmet is not open
@@ -58,7 +60,6 @@ yield
 j loop
 manuallyopened:
 s Helmet SoundAlert 20
-move hazard 0
 move exppos 1
 move stayclosed 0
 j ra
@@ -68,10 +69,7 @@ move exppos 0
 move stayclosed 1
 j ra
 checkopen:
-# don't open helmet if manually opened
 beq stayclosed 1 done
-# don't open helmet if hazardous
-beq hazard 1 done
 beq extreme 1 done
 s Helmet SoundAlert 20
 s Helmet Open 1
@@ -79,49 +77,50 @@ move exppos 1
 j done
 checkclose:
 beq extreme 1 autoclose
-beq hazard 1 autoclose
+beq stayclosed 1 autoclose
 j done
 checkhazard:
+move alert 0
 #close if toxins are present
 l ratio Suit RatioPollutant
 l temp1 Suit RatioVolatiles
 add ratio ratio temp1
-mul pp ratio suitpres
+mul pp ratio pressure
 bge pp MAXTOXIN hazarddetected
 # close if no2 is present
 l ratio Suit RatioNitrousOxide
-mul pp ratio suitpres
+mul pp ratio pressure
 bge pp MAXNO2 hazarddetected
 # close if pressure is extreme
-l extpres Suit PressureExternal
-bge extpres MAXPRES preshigh
-ble extpres MINPRES preslow
+l pressure Suit PressureExternal
+bge pressure MAXPRES preshigh
+ble pressure MINPRES preslow
 # close if temp is extreme
-l exttemp Suit TemperatureExternal
+l temperature Suit TemperatureExternal
 add temp1 MAXTEMP CTOK
-bge exttemp temp1 temphigh
+bge temperature temp1 temphigh
 add temp1 MINTEMP CTOK
-ble exttemp temp1 templow
+ble temperature temp1 templow
 move extreme 0
 j ra
 preshigh:
-s Helmet SoundAlert 39
+move alert 39
 j extremeenv
 preslow:
-s Helmet SoundAlert 40
+move alert 40
 j extremeenv
 templow:
-s Helmet SoundAlert 42
+move alert 42
 j extremeenv
 temphigh:
-s Helmet SoundAlert 41
+move alert 41
 j extremeenv
 extremeenv:
 move extreme 1
 j ra
 hazarddetected:
-s Helmet SoundAlert 43
-move hazard 1
+move alert 43
+move stayclosed 1
 j ra
 autoclose:
 s Helmet Open 0
