@@ -6,19 +6,13 @@
   <Description>​</Description>
   <Author>onebit</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># SMAL-200
+  <Instructions># SMAL-100
 # Smart Airlock
 #
 # Connect the airlock console, two active vents,
 # and two pipe sensors.
 # After you use the airlock the vents
 # are automatically depressurized.
-# CONFIG
-define MAXPRESSURE 30000
-define INTPRES 105
-define EXTPRES 135
-define TIMEOUT 60
-
 alias Console d0
 alias IntVent d1
 alias ExtVent d2
@@ -26,47 +20,101 @@ alias GasSensor d3
 alias IntSensor d4
 alias ExtSensor d5
 
+define MAXPRESSURE 25000
+define INTVENT 1
+define EXTVENT 2
+define INTSENSOR 4
+define EXTSENSOR 5
+define TIMEOUT 60
+
+alias devVent r0
+alias devSensor r1
 alias setting r2
+alias lastSetting r3
+alias pressure r4
+alias sp r5
 alias ticks r6
-alias intopen r8
-alias extopen r9
-
+alias temp r7
 init:
-s IntVent Mode 0
-s IntVent PressureInternal MAXPRESSURE
-s IntVent PressureExternal INTPRES
-s IntVent Lock 1
-
-s ExtVent Mode 0
-s ExtVent PressureInternal MAXPRESSURE
-s ExtVent PressureExternal EXTPRES
-s ExtVent Lock 1
-
-loop:
 l setting Console Setting
-seq intopen setting 2
-seq extopen setting 5
-s IntVent On intopen
-s ExtVent On extopen
-yield
-j loop
+mul sp MAXPRESSURE 0.8
 
+# wait for console setting to change
 reset:
 move ticks 0
 
 idle:
+jal decide
 bge ticks TIMEOUT powersave
 add ticks ticks 1
 yield
 j idle
+
+extopen:
+move devVent EXTVENT
+move devSensor EXTSENSOR
+j checkpressure
+
+intopen:
+move devVent INTVENT
+move devSensor INTSENSOR
+j checkpressure
+
+checkpressure:
+l pressure dr1 Pressure
+ble pressure MAXPRESSURE reset
+venton:
+s dr0 Lock 0
+s dr0 On 1
+#s dr0 PressureExternal 150
+s dr0 Mode 0
+jal extpressure
+vent:
+yield
+l pressure dr1 Pressure
+s db Setting pressure
+move lastSetting setting
+l setting Console Setting
+bne setting lastSetting interrupt
+ble pressure sp ventoff
+jal extpressure
+j vent
+
+ventoff:
+s dr0 On 0
+j lockvent
+
+interrupt:
+s dr0 Mode 1
+j lockvent
+
+lockvent:
+s dr0 Lock 1
+j reset
 
 powersave:
 s Console On 0
 s IntSensor On 0
 s ExtSensor On 0
 standby:
+jal decide
 l temp Console On
 beq temp 1 reset
 yield
+
+decide:
+move lastSetting setting
+l setting Console Setting
+s db Setting setting
+beq setting lastSetting ra
+beq setting 2 intopen
+beq setting 5 extopen
+move ticks 0
+j ra
+
+extpressure:
+l temp GasSensor Pressure
+add temp temp 1
+s dr0 PressureExternal temp
 j ra</Instructions>
 </InstructionData>
