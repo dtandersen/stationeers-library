@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133297905553091862</DateTime>
+  <GameVersion>0.2.4097.19357</GameVersion>
+  <Title>Batch Harvie</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Batch Harvie
+
+define STARTPLANT 0
+define NUMPLANT 5
+
+alias LightSensor d0
+
+#define HARVIE HASH("StructureHarvie")
+define HARVIE 958056199
+#define TRAY HASH("StructureHydroponicsTray")
+define TRAY -1841632400
+define LIGHT HASH("StructureGrowLight")
+
+alias status r0
+alias growth r1
+alias seeding r2
+alias mature r3
+alias plantindex r4
+alias daytime r5
+alias occ r6
+alias pressure r7
+alias thash r8
+alias lighttick r9
+alias temp1 r10
+define LIGHTDUR 900
+
+#sbn HARVIE HASH("Harvie-00-aiJs3D") Plant 1
+#yield
+j loop
+
+handlelights:
+move temp1 daytime
+l daytime LightSensor Activate
+xor temp1 daytime temp1
+and temp1 daytime temp1
+beq temp1 0 inclight
+resettime:
+move lighttick 0
+j start
+inclight:
+add lighttick lighttick 1
+start:
+s db Setting lighttick
+slt temp1 lighttick LIGHTDUR
+sb LIGHT On temp1
+j ra
+
+loop:
+move plantindex STARTPLANT
+beginloop:
+jal handlelights
+bge plantindex NUMPLANT endloop
+#s db Setting 7
+#lbn status TRAY 0 Pressure 0
+#move occ -1
+lbns occ TRAY plantindex 0 Occupied Maximum
+#s db Setting occ
+beq occ 1 checkharvest
+lbn pressure TRAY plantindex Temperature Minimum
+#s db Setting pressure
+blt pressure 293.15 nextloop
+trayempty:
+lbns occ HARVIE plantindex 0 Occupied Minimum
+#s db Setting occ
+beq occ 0 nextloop
+#s db Setting 12
+sbn HARVIE plantindex Plant 1
+sleep 6
+j nextloop
+#lbn status HARVIE plantindex Mode 2
+
+checkharvest:
+#lbns growth TRAY plantindex 0 Growth 0
+lbns seeding TRAY plantindex 0 Seeding Minimum
+beq seeding 1 harvest
+lbns mature TRAY plantindex 0 Mature Minimum
+beq mature 1 harvest
+j nextloop
+harvest:
+sbn HARVIE plantindex Harvest 1
+sleep 6
+j nextloop
+#lbns mature TRAY plantindex 0 Mature 0
+#s db Setting seeding
+nextloop:
+add plantindex plantindex 1
+yield
+j beginloop
+endloop:
+
+yield
+j loop</Instructions>
+</InstructionData>
