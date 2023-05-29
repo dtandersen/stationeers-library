@@ -20,12 +20,11 @@ alias Helmet d0
 alias Jetpack d1
 
 alias suitpres r0
+alias extpres r0
 alias manualclosed r1
 alias ratio r2
 alias open r3
-alias extpres r4
-alias lastopen r5
-alias helmetchanged r6
+alias autoopened r4
 alias exttemp r7
 alias hazard r9
 alias autoclosed r10
@@ -33,32 +32,37 @@ alias temp1 r11
 alias pp r12
 alias extreme r13
 alias manualopened r14
+s Helmet Volume 50
 loop:
 l suitpres Suit Pressure
 l ratio Suit RatioOxygen
 mul pp ratio suitpres
 slt open pp MINO2PP
 s Suit Filtration open
+jal checkhazard
 l open Helmet Open
-xor helmetchanged open lastopen
+#xor helmetchanged open lastopen
 not temp1 open
 s Suit AirRelease temp1
 # remain autoclosed if helmet is not open
-and manualclosed autoclosed temp1
+and manualclosed autoopened temp1
 and manualopened autoclosed open
 beqal manualopened 1 manuallyopened
 beqal manualclosed 1 manuallyclosed
-jal checkhazard
 beq open 0 checkopen
 beq open 1 checkclose
 done:
-l lastopen Helmet Open
 yield
 j loop
 manuallyopened:
+s Helmet SoundAlert 29
 move hazard 0
+move autoopened 0
+move autoclosed 0
 j ra
 manuallyclosed:
+s Helmet SoundAlert 30
+move autoopened 0
 move autoclosed 0
 j ra
 checkopen:
@@ -67,9 +71,9 @@ beq autoclosed 0 done
 # don't open helmet if hazardous
 beq hazard 1 done
 beq extreme 1 done
+move autoopened 1
 s Helmet SoundAlert 21
 s Helmet Open 1
-s Suit AirRelease 0
 j done
 checkclose:
 beq extreme 1 autoclose
