@@ -20,82 +20,84 @@ alias Helmet d0
 alias Jetpack d1
 
 alias pressure r0
-alias manualopened r1
-alias manualclosed r2
-alias ratio r3
-alias open r4
-alias stayclosed r5
-alias temperature r6
-alias exppos r7 # expected helmet position
-alias oop r8 # helmet out of position
-alias temp1 r9
-alias pp r10
-alias extreme r11
-alias alert r12
-
+alias helmetopen r1
+alias helmetclosed r2
+alias stayclosed r3
+alias temperature r4
+alias lastopen r5 # expected helmet
+alias pp r6
+alias extreme r7
+alias alert r8
+alias lastalert r9
+alias temp1 r14
+alias temp2 r15
+move lastalert 0
 s Helmet Volume 50
+l lastopen Helmet Open
 loop:
-l pressure Suit Pressure
-l ratio Suit RatioOxygen
-mul pp ratio pressure
-slt open pp MINO2PP
-s Suit Filtration open
+l helmetopen Helmet Open
+seq helmetclosed helmetopen 0
+jal miser
 jal checkhazard
-l open Helmet Open
-beq open 0 skipalert
-s Helmet SoundAlert alert
-skipalert:
-not temp1 open
-s Suit AirRelease temp1
-# remain autoclosed if helmet is not open
-sne oop exppos open
-and manualclosed oop temp1
-and manualopened oop open
-beqal manualopened 1 manuallyopened
-beqal manualclosed 1 manuallyclosed
-beq open 0 checkopen
-beq open 1 checkclose
+sne temp1 lastopen helmetopen
+and temp2 temp1 helmetclosed
+bgtzal temp2 manuallyclosed
+and temp2 temp1 helmetopen
+bgtzal temp2 manuallyopened
+s Suit Setting temp2
+beq helmetclosed 1 checkopen
+beq helmetopen 1 checkclose
 done:
+alert:
+beqz alert skipalert
+beq alert lastalert skipalert
+s Helmet SoundAlert alert
+move lastalert alert
+skipalert:
 yield
 j loop
+miser:
+l pressure Suit Pressure
+l temp1 Suit RatioOxygen
+mul pp temp1 pressure
+slt temp1 pp MINO2PP
+s Suit Filtration temp1
+s Suit AirRelease helmetclosed
+s Suit On helmetclosed
+j ra
 manuallyopened:
-s Helmet SoundAlert 20
-move exppos 1
+move alert 20
+move lastopen 1
 move stayclosed 0
 j ra
 manuallyclosed:
-s Helmet SoundAlert 21
-move exppos 0
+move alert 21
+move lastopen 0
 move stayclosed 1
 j ra
 checkopen:
 beq stayclosed 1 done
 beq extreme 1 done
-s Helmet SoundAlert 20
+move alert 20
 s Helmet Open 1
-move exppos 1
+move lastopen 1
 j done
 checkclose:
 beq extreme 1 autoclose
 beq stayclosed 1 autoclose
 j done
 checkhazard:
-move alert 0
-#close if toxins are present
-l ratio Suit RatioPollutant
-l temp1 Suit RatioVolatiles
-add ratio ratio temp1
-mul pp ratio pressure
+l temp1 Suit RatioPollutant
+l temp2 Suit RatioVolatiles
+add temp1 temp1 temp2
+mul pp temp1 pressure
 bge pp MAXTOXIN hazarddetected
-# close if no2 is present
-l ratio Suit RatioNitrousOxide
-mul pp ratio pressure
+l temp1 Suit RatioNitrousOxide
+mul pp temp1 pressure
 bge pp MAXNO2 hazarddetected
-# close if pressure is extreme
 l pressure Suit PressureExternal
 bge pressure MAXPRES preshigh
 ble pressure MINPRES preslow
-# close if temp is extreme
 l temperature Suit TemperatureExternal
 add temp1 MAXTEMP CTOK
 bge temperature temp1 temphigh
@@ -124,6 +126,7 @@ move stayclosed 1
 j ra
 autoclose:
 s Helmet Open 0
-move exppos 0
+move alert 21
+move lastopen 0
 j done</Instructions>
 </InstructionData>
