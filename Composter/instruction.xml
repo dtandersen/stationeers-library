@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133299760903471191</DateTime>
+  <GameVersion>0.2.4102.19380</GameVersion>
+  <Title>Composter</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>define MINQTY 3
+define MINH20 20
+alias Composter d0
+alias GasSensor d1
+alias Vent d2
+alias LiquidSensor d3
+
+alias pressure r0
+alias venton r1
+alias quantity r2
+alias activate r3
+#alias xhasitems r4
+alias h20mols r5
+#alias xcomposton r6
+#alias xhasbiomass r7
+alias haswater r7
+alias temp1 r14
+alias temp2 r15
+
+s Vent Mode 1
+s LiquidSensor On 1
+loop:
+l pressure GasSensor Pressure
+sgt venton pressure 5
+s Vent On venton
+
+l temp1 LiquidSensor TotalMoles
+l temp2 LiquidSensor RatioWater
+mul h20mols temp2 temp1
+sge haswater h20mols MINH20
+#s db Setting haswater
+s Composter On haswater
+beq haswater 0 done
+l quantity Composter Quantity
+blt quantity MINQTY done
+#beq hasbiomass 0 done
+l activate Composter Activate
+beq activate 1 done
+#blt quantity MINQTY done
+s Composter Activate 1
+done:
+j loop</Instructions>
+</InstructionData>
