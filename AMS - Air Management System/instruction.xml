@@ -42,13 +42,14 @@ alias hazard r14
 alias temp1 r15
 
 init:
+s Air PressureInternal 0
+s Air Mode 0
+s Waste Mode 1
 add sphot TEMPHOT 273.15
 add spcold TEMPCOLD 273.15
 sub spcold spcold TEMPDIFF
 move spair PMIN
 move spwaste PMAX
-s Waste PressureInternal 40000
-s Waste Mode 1
 
 loop:
 heatmode:
@@ -119,6 +120,7 @@ s db Setting 3
 done:
 yield
 j loop
+
 detecthazard:
 l ratio GasSensor RatioVolatiles
 mul pp ratio pressure
