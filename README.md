@@ -95,3 +95,7 @@ Reads `Temperature` and controls `On`.
 ## STC2A - 2-axis Solar Tracking with Park
 ## TRD - Temperature Reader
 ## VC-100 - Valve Control
+
+# References
+
+https://computererika.github.io/StationeersHashGen/

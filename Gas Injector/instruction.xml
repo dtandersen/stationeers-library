@@ -12,19 +12,38 @@ alias Pump d1
 alias pressure r0
 alias ratio r1
 alias pp r2
-define K 0.5
+define K 50
+define I 0.5
 alias rate r4
 alias cutin r5
-
-define PPMAX 0.5
-
+alias diff r6
+alias temp1 r7
+define PPMAX 1.25
+define bias 0
+alias xlasterror r8
+alias xerrorx r9
+alias integral r10
+alias temp1 r11
+alias lastintegral r12
 loop:
 l pressure GasSensor Pressure
-l ratio GasSensor RatioVolatiles
+l ratio GasSensor RatioCarbonDioxide
 mul pp ratio pressure
-sub rate PPMAX pp
-mul rate K rate
-s db Setting rate
+sub xerrorx PPMAX pp
+mul temp1 xerrorx I
+add integral lastintegral temp1
+#add diff diff rate
+mul rate K xerrorx
+add rate rate integral
+#mul temp1 I diff
+add rate rate bias
+#add rate rate temp1
+#min rate
+#snltz rate
+move xlasterror xerrorx
+move lastintegral integral
+s db Setting lastintegral
+#slt rate rate 0.01
 s Pump Setting rate
 sgtz cutin rate
 s Pump On cutin
