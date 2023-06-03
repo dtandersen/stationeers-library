@@ -21,7 +21,7 @@ define PMIN 92
 define PMAX 98
 define TEMPDIFF 1
 define PRESDIFF 1
-define MAXX 0.45
+define MAXTOXIN 0.45
 define MAXH2 0.01
 
 alias sphot r0
@@ -61,8 +61,6 @@ add tmax temp1 TEMPDIFF
 slt toolow pv spcold
 select spcold toolow tmax tmin
 s Heater On toolow
-#sub temp1 spcold 273.15
-#s db Setting temp1
 
 coolmode:
 bdns Cooler waste
@@ -72,8 +70,6 @@ add tmax temp1 TEMPDIFF
 sgt toohigh pv sphot
 select sphot toohigh tmin tmax
 s Cooler On toohigh
-#sub temp1 sphot 273.15
-#s db Setting temp1
 
 l pressure GasSensor Pressure
 jal detecthazard
@@ -128,7 +124,7 @@ sgt hazard pp MAXH2
 l temp1 GasSensor RatioPollutant
 add ratio ratio temp1
 mul pp ratio pressure
-sge temp1 pp MAXX
+sge temp1 pp MAXTOXIN
 or hazard hazard temp1
 j ra</Instructions>
 </InstructionData>
