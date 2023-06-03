@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-06-03T04:45:14.134Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="_HowDQHtoFiIreMfrqeh" version="21.3.6" type="github">
+<mxfile host="app.diagrams.net" modified="2023-06-03T04:48:29.029Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="QyV_WxvQQA2aGgYhELCc" version="21.3.6" type="github">
   <diagram id="WjzMCz5cW0PldS_9bLKK" name="Page-1">
     <mxGraphModel dx="1434" dy="796" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#004970" math="0" shadow="0">
       <root>
@@ -135,13 +135,13 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="jqnOy9VGXWSSoWR_YB4v-15" value="checkpressure&lt;br&gt;---" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#1E2224;fontStyle=1;fontColor=#FFFFFF;strokeColor=#FFFFFF;sketch=1;curveFitting=1;jiggle=2;strokeWidth=2;gradientColor=none;fillStyle=zigzag;" parent="1" vertex="1">
-          <mxGeometry x="910" y="560" width="200" height="80" as="geometry" />
+        <mxCell id="jqnOy9VGXWSSoWR_YB4v-15" value="checkpressure&lt;br&gt;---&lt;br&gt;devSensor.On = 1&lt;br&gt;pressure = devSensor.Pressure" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#1E2224;fontStyle=1;fontColor=#FFFFFF;strokeColor=#FFFFFF;sketch=1;curveFitting=1;jiggle=2;strokeWidth=2;gradientColor=none;fillStyle=zigzag;" parent="1" vertex="1">
+          <mxGeometry x="910" y="560" width="200" height="100" as="geometry" />
         </mxCell>
         <mxCell id="jqnOy9VGXWSSoWR_YB4v-23" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;sketch=1;curveFitting=1;jiggle=2;fillColor=#f5f5f5;strokeColor=#999999;" parent="1" source="jqnOy9VGXWSSoWR_YB4v-19" target="rk5oXhjm5HisSccfo7RU-15" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="jqnOy9VGXWSSoWR_YB4v-19" value="venton&lt;br&gt;---&lt;br&gt;devVent.Lock = 0&lt;br&gt;devVent.Mode =1&lt;br&gt;devVent.On = 1&lt;br&gt;devVent.PressureExternal = 150" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#1E2224;fontStyle=1;fontColor=#FFFFFF;strokeColor=#FFFFFF;sketch=1;curveFitting=1;jiggle=2;strokeWidth=2;gradientColor=none;fillStyle=zigzag;" parent="1" vertex="1">
+        <mxCell id="jqnOy9VGXWSSoWR_YB4v-19" value="venton&lt;br&gt;---&lt;br&gt;devVent.Lock = 0&lt;br&gt;devVent.Mode =1&lt;br&gt;devVent.On = 1&lt;br&gt;devVent.PressureExternal = pressure + 1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#1E2224;fontStyle=1;fontColor=#FFFFFF;strokeColor=#FFFFFF;sketch=1;curveFitting=1;jiggle=2;strokeWidth=2;gradientColor=none;fillStyle=zigzag;" parent="1" vertex="1">
           <mxGeometry x="1160" y="700" width="230" height="120" as="geometry" />
         </mxCell>
         <mxCell id="jqnOy9VGXWSSoWR_YB4v-24" value="lockvent&lt;br&gt;---&lt;br&gt;devVent.Lock = 1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#1E2224;fontStyle=1;fontColor=#FFFFFF;strokeColor=#FFFFFF;sketch=1;curveFitting=1;jiggle=2;strokeWidth=2;gradientColor=none;fillStyle=zigzag;" parent="1" vertex="1">
