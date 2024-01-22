@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133502918775540143</DateTime>
+  <GameVersion>0.2.4731.21714</GameVersion>
+  <Title>Deep Miner</Title>
+  <Description>​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Deep Miner
+alias ArcFurnace d0
+alias Centrifuge1 d1
+alias Centrifuge2 d2
+alias DeepMiner d3
+
+alias device r0
+alias hasInput r1
+alias hasOutput r2
+alias devices r3
+alias occupied r4
+alias qty r5
+alias open r6
+alias t0 r10
+define MAXQTY 100
+
+start:
+s DeepMiner On 1
+s Centrifuge1 On 1
+s Centrifuge2 On 1
+s ArcFurnace On 1
+ls occupied ArcFurnace 1 Occupied # Export
+beq occupied 1 done
+ls occupied ArcFurnace 0 Occupied # Import
+beq occupied 0 done
+l t0 ArcFurnace Activate
+beq t0 1 done
+s ArcFurnace Activate 1
+done:
+
+move device 1
+jal handlecent
+move device 2
+jal handlecent
+yield
+j start
+
+handlecent:
+l open dr0 Open
+l qty dr0 Reagents
+s db Setting qty
+beq open 1 opened
+closed:
+sge t0 qty MAXQTY
+s dr0 Open t0
+j done2
+opened:
+sgtz t0 qty
+s dr0 Open t0
+done2:
+j ra
+#ls qty DeepMiner 0 Occupied
+#l qty DeepMiner Error
+#ls
+#s db Setting qty
+
+#yield
+#j start</Instructions>
+</InstructionData>
