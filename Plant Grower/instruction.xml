@@ -6,7 +6,9 @@
   <Description>​</Description>
   <Author>onebit</Author>
   <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions>alias DaySensor d0
+  <Instructions>
+# see Batch Harvie for a more advanced solution     
+alias DaySensor d0
 alias Light d1
 alias TempSensor d2
 alias Cooler d3
