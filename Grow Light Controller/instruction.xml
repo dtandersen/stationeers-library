@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133627369155037399</DateTime>
+  <GameVersion>0.2.5023.22803</GameVersion>
+  <Title>Grow Light Controller</Title>
+  <Description>Active Vent​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Grow Light Controller
+# Turns light on during the day
+# to supplement light
+alias DaylightSensor d0
+define GROWLIGHTHASH HASH("StructureGrowLight")
+alias daytime r0
+
+loop:
+l daytime DaylightSensor Activate
+s db Setting daytime
+sb GROWLIGHTHASH On daytime
+
+yield
+j loop</Instructions>
+</InstructionData>
