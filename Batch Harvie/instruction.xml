@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <DateTime>133297905553091862</DateTime>
-  <GameVersion>0.2.4097.19357</GameVersion>
-  <Title>Batch Harvie</Title>
-  <Description>​</Description>
-  <Author>onebit</Author>
-  <WorkshopFileHandle>0</WorkshopFileHandle>
-  <Instructions># Batch Harvie
-
+<DateTime>133297905553091862</DateTime>
+<GameVersion>0.2.4097.19357</GameVersion>
+<Title>Batch Harvie</Title>
+<Description>​</Description>
+<Author>onebit</Author>
+<WorkshopFileHandle>0</WorkshopFileHandle>
+<Instructions># Batch Harvie
+# https://pantacro4life.github.io/
+# /Stationeers-Hash-Generator/
 define STARTPLANT 0
-define NUMPLANT 5
+define NUMPLANT 1
 
 alias LightSensor d0
 
@@ -36,7 +37,7 @@ alias seeded r12
 alias collectseeds r13
 alias temp1 r14
 alias temp2 r15
-#alias mature r
+
 define LIGHTDUR 800
 
 #sbn HARVIE HASH("Harvie-00-aiJs3D") Plant 1
@@ -45,75 +46,75 @@ move collectseeds COLLECTSEEDS
 j loop
 
 handlelights:
-move temp1 daytime
-l daytime LightSensor Activate
-xor temp1 daytime temp1
-and temp1 daytime temp1
-beq temp1 0 inclight
-resettime:
-move lighttick 0
-j start
-inclight:
-add lighttick lighttick 1
-start:
-s db Setting lighttick
-slt temp1 lighttick LIGHTDUR
-sb LIGHT On temp1
+	move temp1 daytime
+	l daytime LightSensor Activate
+	xor temp1 daytime temp1
+	and temp1 daytime temp1
+	beq temp1 0 inclight
+	resettime:
+	move lighttick 0
+	j start
+	inclight:
+	add lighttick lighttick 1
+	start:
+	s db Setting lighttick
+	slt temp1 lighttick LIGHTDUR
+	sb LIGHT On temp1
 j ra
 
 loop:
 move plant STARTPLANT
 beginloop:
-jal handlelights
-bge plant NUMPLANT endloop
-#s db Setting 7
-#lbn status TRAY 0 Pressure 0
-#move occ -1
-lbns occ TRAY plant 0 Occupied Maximum
-#s db Setting occ
-beq occ 1 checkharvest
-lbn pressure TRAY plant Temperature Minimum
-#s db Setting pressure
-blt pressure 293.15 nextloop
-trayempty:
-lbns occ HARVIE plant 0 Occupied Minimum
-#s db Setting occ
-beq occ 0 nextloop
-#s db Setting 12
-sbn HARVIE plant Plant 1
-sleep 6
-j nextloop
-#lbn status HARVIE plantindex Mode 2
-
-checkharvest:
-lbns growth TRAY plant 0 Growth Sum
-lbns seeding TRAY plant 0 Seeding Sum
-lbns mature TRAY plant 0 Mature Sum
-sne seeded seeding -1
-# if it seeded, may as well harvest
-bgtz seeded harvest
-# we want seeds and it didn't have any
-# so we must wait
-bgtz collectseeds nextloop
-# we don't want seeds, harvest if mature
-bgtz mature harvest
-j nextloop
-bgtz mature harvest
-checkseeds:
-seq harvestable growth 5
-
-and harvestable harvestable seeded
-bgtz harvestable harvest
-j nextloop
-harvest:
-sbn HARVIE plant Harvest 1
-sleep 6
-j nextloop
-#lbns mature TRAY plantindex 0 Mature 0
-#s db Setting seeding
-nextloop:
-add plant plant 1
-yield
+	jal handlelights
+	bge plant NUMPLANT endloop
+	s db Setting 7
+	#lbn status TRAY 0 Pressure 0
+	#move occ -1
+	lbns occ TRAY plant 0 Occupied Maximum
+	#s db Setting occ
+	beq occ 1 checkharvest
+	lbn pressure TRAY plant Temperature Minimum
+	#s db Setting pressure
+	blt pressure 293.15 nextloop
+	trayempty:
+	lbns occ HARVIE plant 0 Occupied Minimum
+	#s db Setting occ
+	beq occ 0 nextloop
+	#s db Setting 12
+	sbn HARVIE plant Plant 1
+	sleep 6
+	j nextloop
+	#lbn status HARVIE plantindex Mode 2
+	
+	checkharvest:
+	lbns growth TRAY plant 0 Growth Sum
+	lbns seeding TRAY plant 0 Seeding Sum
+	lbns mature TRAY plant 0 Mature Sum
+	sne seeded seeding -1
+	# if it seeded, may as well harvest
+	bgtz seeded harvest
+	# we want seeds and it didn't have any
+	# so we must wait
+	bgtz collectseeds nextloop
+	# we don't want seeds, harvest if mature
+	bgtz mature harvest
+	j nextloop
+	bgtz mature harvest
+	checkseeds:
+	seq harvestable growth 5
+	
+	and harvestable harvestable seeded
+	bgtz harvestable harvest
+	j nextloop
+	harvest:
+	sbn HARVIE plant Harvest 1
+	sleep 6
+	j nextloop
+	#lbns mature TRAY plantindex 0 Mature 0
+	#s db Setting seeding
+	nextloop:
+	add plant plant 1
+	yield
 j beginloop
 endloop:
 
