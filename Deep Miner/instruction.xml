@@ -8,9 +8,11 @@
   <WorkshopFileHandle>0</WorkshopFileHandle>
   <Instructions># Deep Miner
 alias ArcFurnace d0
-alias Centrifuge1 d1
-alias Centrifuge2 d2
-alias DeepMiner d3
+alias DeepMiner d1
+alias Unused d2
+alias Centrifuge1 d3
+alias Centrifuge2 d4
+alias Centrifuge3 d5
 
 alias device r0
 alias hasInput r1
@@ -26,6 +28,7 @@ start:
 s DeepMiner On 1
 s Centrifuge1 On 1
 s Centrifuge2 On 1
+s Centrifuge3 On 1
 s ArcFurnace On 1
 ls occupied ArcFurnace 1 Occupied # Export
 beq occupied 1 done
@@ -36,9 +39,11 @@ beq t0 1 done
 s ArcFurnace Activate 1
 done:
 
-move device 1
+move device 3
 jal handlecent
-move device 2
+move device 4
+jal handlecent
+move device 5
 jal handlecent
 yield
 j start
