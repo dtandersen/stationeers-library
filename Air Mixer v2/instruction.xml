@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133629042987135256</DateTime>
+  <GameVersion>0.2.5027.22819</GameVersion>
+  <Title>Air Mixer v2</Title>
+  <Description>Air mixer that uses less power​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Breathable Air Mixer
+# https://github.com/dtandersen/sta
+# Note: Input1 = Nitrogen
+# Input 2= Oxygen
+alias N2Sensor d0
+alias AirSensor d1
+alias GasMixer d2
+alias Unused d3
+alias Unused d4
+alias Unused d5
+
+alias n2pressure r3
+alias outpressure r4
+alias active r5
+alias temp1 r10
+
+define maxPressure 1000
+define SLEEPTIME 30
+
+init:
+s N2Sensor On 1
+s AirSensor On 1
+
+start:
+l outpressure AirSensor Pressure
+slt active outpressure maxPressure
+beqz active inactive
+s GasMixer On 1
+s N2Sensor On 1
+l n2pressure N2Sensor Pressure
+select temp1 n2pressure 80 0
+s GasMixer Setting temp1
+j done
+
+inactive:
+s GasMixer On 0
+s N2Sensor On 0
+s AirSensor On 0
+sleep SLEEPTIME
+s AirSensor On 1
+
+done:
+yield
+j start</Instructions>
+</InstructionData>
