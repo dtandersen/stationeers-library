@@ -10,13 +10,17 @@
 # Turns light on during the day
 # to supplement light
 alias DaylightSensor d0
-define GROWLIGHTHASH HASH("StructureGrowLight")
+
+define GROWLIGHTS HASH("StructureGrowLight")
+
 alias daytime r0
+alias lastdaytime r1
+alias changed r1
 
 loop:
 l daytime DaylightSensor Activate
 s db Setting daytime
-sb GROWLIGHTHASH On daytime
+sb GROWLIGHTS On daytime
 
 yield
 j loop</Instructions>
