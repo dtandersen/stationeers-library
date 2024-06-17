@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133628164878077067</DateTime>
+  <GameVersion>0.2.5026.22812</GameVersion>
+  <Title>Batch Filtration</Title>
+  <Description>Filter gasses with batch instructions​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions>alias Analyzer d0
+
+alias ratio r0
+alias pressure r1
+alias pp r2
+alias temp1 r10
+
+define MINPRES 100
+define FILTER HASH("StructureFiltration")
+define O2FILTER HASH("O2 Filter")
+define N2FILTER HASH("N2 Filter")
+define CO2FILTER HASH("CO2 Filter")
+
+loop:
+l pressure Analyzer Pressure
+
+l ratio Analyzer RatioOxygen
+mul pp ratio pressure
+s db Setting pp
+sgt temp1 pp MINPRES
+sbn FILTER O2FILTER On temp1
+
+l ratio Analyzer RatioNitrogen
+mul pp ratio pressure
+sgt temp1 pp MINPRES
+sbn FILTER N2FILTER On temp1
+
+l ratio Analyzer RatioCarbonDioxide
+mul pp ratio pressure
+sgt temp1 pp MINPRES
+sbn FILTER CO2FILTER On temp1
+
+yield
+j loop</Instructions>
+</InstructionData>
