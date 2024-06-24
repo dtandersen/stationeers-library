@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InstructionData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DateTime>133634205984341992</DateTime>
+  <GameVersion>0.2.5034.22853</GameVersion>
+  <Title>Sorter</Title>
+  <Description>Sorter​</Description>
+  <Author>onebit</Author>
+  <WorkshopFileHandle>0</WorkshopFileHandle>
+  <Instructions># Sorter Programmer
+
+alias Sorter d0
+alias opcode r0
+
+sll opcode HASH("ItemCoalOre") 8
+add opcode opcode 1
+clr Sorter
+put Sorter 0 opcode</Instructions>
+</InstructionData>
