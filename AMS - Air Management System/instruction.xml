@@ -42,8 +42,10 @@ alias hazard r14
 alias temp1 r15
 
 init:
+brdns Air 3
 s Air PressureInternal 0
 s Air Mode 0
+brdns Waste 2
 s Waste Mode 1
 add sphot TEMPHOT 273.15
 add spcold TEMPCOLD 273.15
