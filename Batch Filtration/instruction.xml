@@ -18,6 +18,7 @@ define FILTER HASH("StructureFiltration")
 define O2FILTER HASH("O2 Filter")
 define N2FILTER HASH("N2 Filter")
 define CO2FILTER HASH("CO2 Filter")
+define H2FILTER HASH("H2 Filter")
 
 loop:
 l pressure Analyzer Pressure
@@ -37,6 +38,11 @@ l ratio Analyzer RatioCarbonDioxide
 mul pp ratio pressure
 sgt temp1 pp MINPRES
 sbn FILTER CO2FILTER On temp1
+
+l ratio Analyzer RatioVolatiles
+mul pp ratio pressure
+sgt temp1 pp MINPRES
+sbn FILTER H2FILTER On temp1
 
 yield
 j loop</Instructions>
